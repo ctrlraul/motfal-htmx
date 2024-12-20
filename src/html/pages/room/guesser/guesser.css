@@ -1,0 +1,96 @@
+section.center {
+	position: relative;
+	flex: 1;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 1em;
+	justify-content: center;
+	align-items: center;
+}
+
+section.center > button.start {
+	width: 10rem;
+}
+
+
+#articles-counter {
+	font-weight: 700;
+	color: var(--color-accent);
+}
+
+
+section > span {
+	display: block;
+	text-align: center;
+	width: 100%;
+	font-weight: 700;
+}
+
+
+section.users > ul {
+	height: 12em;
+	overflow-y: auto;
+	margin-top: 0.5em;
+	padding: 0;
+	margin: 0;
+}
+
+section.users > ul > li {
+	margin-top: 0.5rem;
+}
+
+section.users > ul > li > div {
+	display: flex;
+    align-items: center;
+	background: var(--color-background);
+    border-radius: var(--radius-common);
+    padding: 0.25rem 0.5rem;
+}
+
+
+section.users > ul > li .kick {
+	flex: 1;
+	color: var(--color-bad);
+	text-align: end;
+}
+
+section.users > ul > li.guesser .kick {
+	display: none;
+}
+
+section.users > ul > li .guesser-label {
+	flex: 1;
+	display: none;
+	font-size: 80%;
+	color: var(--color-accent);
+	text-align: end;
+}
+
+section.users > ul > li.guesser .guesser-label {
+	display: initial;
+}
+
+section.users > ul > li.guesser {
+	order: -1;
+}
+
+section.users > ul > li.disconnected {
+	text-decoration: line-through;
+}
+
+
+section.invite > div {
+	display: flex;
+	width: 100%;
+	margin-top: 0.5em;
+	gap: 0.5rem;
+}
+
+section.invite > div > input {
+	flex: 1;
+}
+
+#copy-invite-button {
+	padding: 0.5rem;
+}

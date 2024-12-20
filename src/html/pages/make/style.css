@@ -1,0 +1,36 @@
+main {
+	justify-content: center;
+}
+
+
+main > .std-box-pop {
+	display: flex;
+	padding: 0.5rem;
+	flex-direction: column;
+}
+
+label {
+	padding: 0.5rem;
+	width: 100%;
+}
+
+
+input[type='checkbox'] {
+	margin-right: 0.5rem;
+}
+
+
+.rules hr {
+	width: 100%;
+}
+
+
+button {
+	margin: 1rem;
+}
+
+
+footer {
+	text-align: center;
+	margin: 1rem;
+}
