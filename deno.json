@@ -1,6 +1,6 @@
 {
 	"tasks": {
-		"dev": "deno --env-file --watch -A src/main.ts"
+		"dev": "deno --env-file --watch=static -A src/main.ts"
 	},
 	"imports": {
 		"jsx": "./src/jsx.ts",
