@@ -4,7 +4,7 @@ export interface BasicHeaderProps {
 	children?: unknown;
 }
 
-export function MainHeader(props: BasicHeaderProps): string
+export function MainHeader(props: BasicHeaderProps)
 {
 	const style = /*style*/`
 		font-size: font-size: calc(2rem * sqrt(2));
