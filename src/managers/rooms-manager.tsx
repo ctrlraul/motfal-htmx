@@ -8,16 +8,11 @@ import { objectLength } from '../helpers/object-length.ts';
 import randomString from '../helpers/random-string.ts';
 import { getSwapString, UsersListItem } from '@html/pages/room/guesser/users-list-item.tsx';
 import { EventSender } from './event-sender.ts';
-import { env } from '@raul/env';
 import { ArticlesCounter } from '@html/pages/room/guesser/ArticlesCounter.tsx';
 import { Home } from '@html/pages/home/page.tsx';
 import { RoomStarted } from '@html/pages/room/started/view.tsx';
 import { StartButton } from '@html/pages/room/guesser/StartButton.tsx';
 import { InvitePopup } from '@html/pages/room/started/InvitePopup.tsx';
-
-
-const roomStartIgnoreParticipantsCount = env('ROOM_START_IGNORE_PARTICIPANTS_COUNT', 'false') == 'true';
-const roomStartIgnoreArticlesCount = env('ROOM_START_IGNORE_ARTICLES_COUNT', 'false') == 'true';
 
 
 const logger = new Logger('RoomsManager');
@@ -191,10 +186,7 @@ function startRoom(requestedByUserId: User['id'], room: Room) {
 	if (requestedByUserId != room.guesserId) // Only the guesser can start
 		throw new Error('Only the guesser can start');
 
-	if (!roomStartIgnoreParticipantsCount && Object.keys(room.users).length < 3)
-		throw new Error(`Not enough participants (3 required)`);
-
-	if (!roomStartIgnoreArticlesCount && room.articles.length < 1)
+	if (room.articles.length == 0)
 		throw new Error('No articles submitted');
 
 	if (room.currentArticle != -1)
