@@ -4,10 +4,16 @@ import path from 'node:path';
 import { Style } from '@html/components/style.tsx';
 import { jsx } from 'jsx';
 import { Room } from '../../../data/room.ts';
+import { ArticlesHelper } from '../../../articles/articles-helper.ts';
+
 
 interface MakeRoomProps {
 	currentRoom?: Room | null;
 }
+
+
+const limitUsers = false;
+
 
 export function MakeRoom(props: MakeRoomProps)
 {
@@ -18,48 +24,25 @@ export function MakeRoom(props: MakeRoomProps)
 			<MainHeader>Make Room</MainHeader>
 
 			<main>
-				<div style='text-align: center; margin-bottom: 0.5rem'>
-					Options
-				</div>
-			
-				<div class='std-box-pop g-foreground'>
-					<label>
-						<input type='checkbox' name='any-namespace-checkbox' checked disable />
-						Allow articles in any namespace
-					</label>
-					
-					<label>
-						<input type='checkbox' name='preserve-title-style-checkbox' checked />
-						Preserve article title style
-					</label>
-
-					<div class='g-hr'></div>
-
-					<div style='display: flex; align-items: center;'>
-						<label style='flex: 1;'>
-							<input type='checkbox' name='users-limit-checkbox' />
-							Participants limit
-						</label>
-						<input type='number' name='users-limit-input' value='4' min='3' step='1' style='width: 3rem;' />
-					</div>
-				</div>
+				<DomainsSection />
+				<RulesSection />
 			
 				{props.currentRoom ? (
 					<div class='std-box-pop g-foreground'>
-						<label>
+						<label class='option'>
 							<input type='checkbox' name='invite' checked />
 							Invite previous room
 						</label>
 					</div>
 				) : ''}
 
-				<button class='g-big'
+				<button class='make g-big'
 					hx-post='/make'
 					hx-target='#root'
 					hx-swap='outerHTML'
 					hx-include='input'
 					hx-push-url='true'>
-					Create
+					Make
 				</button>
 			</main>
 
@@ -74,5 +57,78 @@ export function MakeRoom(props: MakeRoomProps)
 
 			<Style src={styleSrc} />
 		</Root>
+	);
+}
+
+
+function DomainsSection()
+{
+	// fight me bro
+	const onclick = `
+		document.querySelectorAll('[data-domain]').forEach(x => x.hidden = true);
+		document.querySelectorAll('[data-domain="%domain%"]').forEach(x => x.hidden = false);
+	`;
+
+	return (
+		<section class='domains std-box-pop g-foreground'>
+			<div class='header'>Domain</div>
+
+			<div class='items'>
+				{ArticlesHelper.getDomains().map((domain, i) => (
+					<label class='option' onclick={onclick.replace('%domain%', domain.name)}>
+						<input type='radio' name='domain' value={domain.name} omit:checked={!i} />
+						{domain.name}
+					</label>
+				))}
+			</div>
+		</section>
+	);
+}
+
+
+function RulesSection()
+{
+	return (
+		<section class='rules std-box-pop g-foreground'>
+
+			<div class='header'>Rules</div>
+			
+			<div class='items'>
+				<div class='checkboxes'>
+					{ArticlesHelper.getDomains().map((domain, i) => 
+						domain.ruleSet.map(rule => (
+							<div data-domain={domain.name} omit:hidden={!!i}>
+								<label class='option'>
+									<input type='checkbox' name={rule.id} checked={rule.defaultValue} />
+									{rule.name}
+								</label>
+							</div>
+						))
+					)}
+				</div>
+
+				<div class='g-hr'></div>
+
+				<div class='limit-container'>
+					<label class='option'>
+						<input type='checkbox'
+							name='limit-users'
+							onclick='limitInput.hidden = !this.checked'
+							omit:checked={limitUsers} />
+						
+						Participants limit
+					</label>
+
+					<input id='limitInput'
+						type='number'
+						name='users-limit'
+						value={4}
+						min={3}
+						max={40}
+						step={1}
+						hidden={!limitUsers} />
+				</div>
+			</div>
+		</section>
 	);
 }

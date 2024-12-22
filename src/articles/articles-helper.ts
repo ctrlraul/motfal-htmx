@@ -1,46 +1,115 @@
 import { Article } from '../data/article.ts';
+import { PokeApi } from './domains/pokeapi.co.ts';
 import { WikipediaOrg } from './domains/wikipedia.org.ts';
+import { WiktionaryOrg } from './domains/wiktionary.org.ts';
 
 
-type GetArticleDataFn = (link: string) => Promise<Article>;
+export interface Rule {
+	id: string;
+	name: string;
+	description: string;
+	defaultValue: boolean;
+}
 
-const domains: Map<string, GetArticleDataFn> = new Map();
+export interface Rules {
+	[id: Rule['id']]: boolean;
+};
+
+export interface ItemSuggestion {
+	id: string;
+	title: string;
+	search: string;
+}
+
+export interface Domain {
+	name: string;
+	itemName: string;
+	submitInputPlaceholder: string;
+	ruleSet: Rule[];
+	getArticle(link: string): Promise<Article>;
+	getRandomArticles(count: number, rules: Rules): Promise<ItemSuggestion[]>;
+}
+
+
+const domains: Map<string, Domain> = new Map();
 
 
 
 // Register domains here
-domains.set('wikipedia.org', WikipediaOrg.getArticleData);
+domains.set(WikipediaOrg.name, WikipediaOrg);
+domains.set(WiktionaryOrg.name, WiktionaryOrg);
+domains.set(PokeApi.name, PokeApi);
 
 
 
-async function get(link: string): Promise<Article>
+function getArticle(domainName: string, link: string): Promise<Article>
 {
-	// Ensure link includes the protocol
-	if (!linkHasProtocol(link))
-		link = 'http://' + link;
+	return domains.get(domainName)!.getArticle(link);
+}
 
-	const url = new URL(link);
-	const linkDomain = url.hostname;
+function getRandomArticles(domainName: string, count: number, rules: Rules): Promise<ItemSuggestion[]>
+{
+	return domains.get(domainName)!.getRandomArticles(count, rules);
+}
 
-	for (const domain of domains.keys())
+function createRules(domainName: string, params: URLSearchParams): Rules
+{
+	const ruleSet = domains.get(domainName)!.ruleSet;
+	const rules: Rules = {};
+
+	for (const rule of ruleSet)
 	{
-		if (!linkDomain.endsWith(domain))
-			continue;
-
-		const getArticleData = domains.get(domain)!;
-		const data = await getArticleData(link);
-
-		return data;
+		const param = params.get(rule.id);
+		rules[rule.id] = param != null ? param === 'on' : rule.defaultValue;
 	}
 
-	throw new Error('Domain not whitelisted');
+	return rules;
 }
 
-function linkHasProtocol(link: string): boolean {
-	return /^\w+:\/\//i.test(link);
+function getRule(domainName: string, id: Rule['id']): Rule
+{
+	const ruleSet = domains.get(domainName)!.ruleSet;
+
+	for (const rule of ruleSet)
+	{
+		if (rule.id == id)
+			return rule;
+	}
+
+	throw new Error(`Domain '${domainName}' has no rule with id '${id}'`);
 }
+
+function getRules(domainName: string): Rule[]
+{
+	return domains.get(domainName)!.ruleSet;
+}
+
+
+function getDomain(domainName: string): Domain | undefined
+{
+	return domains.get(domainName);
+}
+
+function getDomains(): Domain[]
+{
+	return Array.from(domains.values());
+}
+
+/** Expects exact domain match, not a link */
+function isDomainRegistered(domain: unknown): boolean
+{
+	return domains.has(domain as string);
+}
+
 
 
 export const ArticlesHelper = {
-	get,
+	getArticle,
+	getRandomArticles,
+	createRules,
+	getRule,
+	getRules, // TODO: Get rid
+	getDomain,
+	getDomains,
+	isDomainRegistered,
 }

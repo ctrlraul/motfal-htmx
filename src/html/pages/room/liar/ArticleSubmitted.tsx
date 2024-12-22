@@ -6,7 +6,7 @@ import * as Icons from '@html/icons.tsx';
 
 interface ArticleSubmittedProps {
 	room: Room;
-	articleData: Article;
+	article: Article;
 }
 
 export function ArticleSubmitted(props: ArticleSubmittedProps)
@@ -24,11 +24,11 @@ export function ArticleSubmitted(props: ArticleSubmittedProps)
 			<div class="std-box">
 				<div>You submitted</div>
 				<span>
-					<a href={props.articleData.link} target='_blank' style='color: inherit'>
+					<a href={props.article.link} target='_blank' style='color: inherit'>
 						<button style='display: flex; margin: auto; align-items: center; padding: 0.5rem'>
 
-							<ArticleTitle article={props.articleData}
-								preserveStyle={props.room.rulePreserveTitleStyle}/>
+							<ArticleTitle article={props.article}
+								preserveStyle={props.room.rules.preserveTitleStyle as boolean}/>
 							
 							<Icons.OpenExternal style='width: 1.5rem; height: 1.5rem; margin-left: 0.25rem;'/>
 							

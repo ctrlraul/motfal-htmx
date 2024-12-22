@@ -5,7 +5,7 @@ import Axios from 'axios';
 
 interface ArticlesResponse {
 	batchcomplete: string;
-	continue: {
+	continue?: {
 		grncontinue: string;
 		continue: string;
 	},
@@ -19,7 +19,7 @@ interface ArticlesResponse {
 }
 
 
-const apiBaseUrl = 'https://wikipedia.org/';
+const apiBaseUrl = 'https://wiktionary.org/';
 const axios = Axios.create({ baseURL: apiBaseUrl });
 
 
@@ -27,59 +27,50 @@ async function getArticle(id: string): Promise<Article>
 {
 	const title = getTitleFromId(id);
 
-	console.log(id, '->', title);
-
 	const response = await axios.get('/w/api.php', {
 		params: {
 			action: 'query',
 			titles: title,
 			format: 'json',
 			redirects: '1',
-			prop: 'pageprops|pageimages|description|extracts',
+			prop: 'extracts|description',
 			exintro: '1',
 			explaintext: '1',
-			pithumbsize: '500',
 			origin: '*'
 		}
 	});
 
 	// deno-lint-ignore no-explicit-any
 	const pageData: any = Object.values(response.data.query.pages)[0];
-
-	const article: Article = {
+	const articleData: Article = {
 		link: axios.getUri({ url: '/wiki/' + title }),
 		title: response.data.query.redirects ? response.data.query.redirects[0].from : pageData.title,
 		description: pageData.extract,
-		thumbnail: pageData.thumbnail ? pageData.thumbnail.source : null,
-		italic: (pageData.pageprops.displaytitle || '').startsWith('<i>'),
+		thumbnail: '',
+		italic: false
 	};
 
-	return article;
+	return articleData;
 }
 
-async function getRandomArticles(count: number, _rules: Rules): Promise<ItemSuggestion[]>
+async function getRandomArticles(amount: number, _rules: Rules): Promise<ItemSuggestion[]>
 {
 	const namespaces: number[] = [
 		0 // Articles namespace
 	];
 
-	const baseURL = 'https://en.wikipedia.org/w/api.php';
-	const url = new URL(baseURL);
-	const params = new URLSearchParams({
-		action: 'query',
-		generator: 'random',
-		grnnamespace: namespaces.join('|'),
-		grnlimit: count.toString(),
-		format: 'json',
-		origin: '*' // Handle CORS
+	const response = await axios.get<ArticlesResponse>('/w/api.php', {
+		params: {
+			action: 'query',
+			generator: 'random',
+			grnnamespace: namespaces.join('|'),
+			grnlimit: amount.toString(),
+			format: 'json',
+			origin: '*' // Handle CORS
+		}
 	});
 
-	url.search = params.toString();
-
-	const response = await fetch(url.href);
-	const data: ArticlesResponse = await response.json();
-
-	const suggestions: ItemSuggestion[] = Object.values(data.query.pages).map(item => ({
+	const suggestions: ItemSuggestion[] = Object.values(response.data.query.pages).map(item => ({
 		id: item.title,
 		search: axios.getUri({ url: '/wiki/' + item.title }),
 		title: item.title,
@@ -108,21 +99,17 @@ function getTitleFromId(id: string): string
 }
 
 
-export const WikipediaOrg: Domain = {
-	name: 'Wikipedia',
-	itemName: 'Article',
-	submitInputPlaceholder: 'Article name or Wikipedia link',
+
+export const WiktionaryOrg: Domain = {
+	name: 'Wiktionary',
+	itemName: 'word',
+	submitInputPlaceholder: 'Word or Wiktionary link',
 	ruleSet: [{
 		id: 'anyNamespace',
 		name: 'Any Namespace',
 		description: 'Allow picking articles in any namespace',
 		defaultValue: true,
-	}, {
-		id: 'preserveTitleStyle',
-		name: 'Preserve Title Style',
-		description: 'Preserve the title style of articles (italics)',
-		defaultValue: true,
 	}],
 	getArticle,
 	getRandomArticles,
-}
+};

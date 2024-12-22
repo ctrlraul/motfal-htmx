@@ -53,14 +53,18 @@ function notifyUserDisconnected(user: User): void {
 }
 
 
-function createRoom(guesser: User, ruleAnyNamespace: boolean, rulePreserveTitleStyle: boolean, usersLimit: number): Room {
-
+function createRoom(
+	guesser: User,
+	domainName: string,
+	rules: Room['rules'],
+	usersLimit: number): Room
+{
 	const room: Room = {
 		id: findAvailableRoomId(),
 		guesserId: guesser.id,
-		ruleAnyNamespace: ruleAnyNamespace,
-		rulePreserveTitleStyle: rulePreserveTitleStyle,
-		usersLimit: usersLimit,
+		domainName,
+		rules,
+		usersLimit,
 		articles: [],
 		creationTime: Date.now(),
 		currentArticle: -1,
@@ -108,18 +112,23 @@ function addUserToRoom(room: Room, user: User): void {
 
 function removeUserFromRoom(room: Room, userId: User['id']): void
 {
-	logger.log(`Removing user (${userId}) from room (${room.id})`);
+	const user = room.users[userId];
+
+	if (!user)
+		throw new Error(`No user with id '${userId}' in room '${room.id}'`)
+
+	logger.log(`Removing user (${user.id}) from room (${room.id})`);
 
 	// Don't notify if room is already started
 	const shouldNotifyOthers = room.currentArticle === -1;
 
-	delete room.users[userId];
+	delete room.users[user.id];
 
-	if (objectLength(room.users) === 0 || userId === room.guesserId)
+	if (objectLength(room.users) === 0 || user.id === room.guesserId)
 	{
-		if (shouldNotifyOthers && userId === room.guesserId)
+		if (shouldNotifyOthers && user.id === room.guesserId)
 		{
-			const html = render(<Home />);
+			const html = render(<Home user={user} />);
 			emitToRoom(room, 'Kicked', html);
 		}
 
@@ -127,19 +136,19 @@ function removeUserFromRoom(room: Room, userId: User['id']): void
 		return;
 	}
 
-	room.articles = room.articles.filter(article => article.userId != userId);
+	room.articles = room.articles.filter(article => article.userId != user.id);
 
 	if (shouldNotifyOthers)
 	{
 		const html = render(
 			<>
 				<StartButton room={room} />
-				<ArticlesCounter count={room.articles.length} />
+				<ArticlesCounter room={room} />
 				<UsersCount room={room} />
 			</>
 		);
 	
-		EventSender.send(room.guesserId, getSwapString(userId), html);
+		EventSender.send(room.guesserId, getSwapString(user.id), html);
 	}
 }
 
@@ -152,12 +161,17 @@ function kickUserFromRoom(room: Room, userId: User['id'])
 	if (room.kicked.includes(userId))
 		return;
 
-	removeUserFromRoom(room, userId);
+	const user = room.users[userId];
 
-	room.kicked.push(userId);
+	if (!user)
+		return;
+
+	removeUserFromRoom(room, user.id);
+
+	room.kicked.push(user.id);
 	
-	const html = render(<Home />);
-	EventSender.send(userId, 'Kicked', html);
+	const html = render(<Home user={user} />);
+	EventSender.send(user.id, 'Kicked', html);
 }
 
 function addArticleToUserInRoom(room: Room, userId: User['id'], article: Article): void {
@@ -173,7 +187,7 @@ function addArticleToUserInRoom(room: Room, userId: User['id'], article: Article
 	const html = render(
 		<>
 			<StartButton room={room} />
-			<ArticlesCounter count={room.articles.length} />
+			<ArticlesCounter room={room} />
 			<UsersListItem user={user} room={room} />
 		</>
 	);

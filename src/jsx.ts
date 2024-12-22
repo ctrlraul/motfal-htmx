@@ -13,6 +13,13 @@ const voidElements: Set<string> = new Set(['area', 'base', 'br', 'col', 'embed',
 const indentChar = '\t';
 
 
+const prefixes: Map<string, (key: string, value: unknown) => string> = new Map();
+
+// Omit an attribute if the value is falsy
+prefixes.set('omit', (key, value) => value ? ` ${key}="${value}"` : '');
+
+
+
 function jsx(tag: unknown, attributes: Record<string, unknown> | null, ...children: JsxElement[]): JsxElement | JsxElement[]
 {
 	if (typeof tag === 'function')
@@ -62,9 +69,7 @@ function fromHtml(html: string): JsxElement['children']
 	return result;
 }
 
-type HtmlParser2Node = ReturnType<typeof parseDocument>['children'][number];
-
-function toJsxElement(node: HtmlParser2Node): JsxElement | string | null
+function toJsxElement(node: ReturnType<typeof parseDocument>['children'][number]): JsxElement | string | null
 {
 	switch (node.type)
 	{
@@ -93,24 +98,38 @@ function renderElement(element: JsxElement, indent: string): string
 {
 	const { tag } = element as JsxElement;
 
+	// Process attributes
+
 	let attributes: string = '';
 	let innerHtml: string | null = null;
 
-	for (const key in element.attributes)
+	for (const [rawKey, value] of Object.entries(element.attributes))
 	{
-		const value = String(element.attributes[key]);
+		if (rawKey.indexOf(':') != -1)
+		{
+			const [prefix, key] = rawKey.split(':');
+			const handler = prefixes.get(prefix);
 
-		switch (key)
+			if (handler)
+			{
+				attributes += handler(key, value);
+				continue;
+			}
+
+			// console.error(`Unhandled attribute prefix '${prefix}', attribute will be treated normally`);
+		}
+
+		switch (rawKey)
 		{
 			case 'DANGEROUSLY_SET_OUTER_HTML':
-				return value;
+				return String(value);
 			
 			case 'DANGEROUSLY_SET_INNER_HTML':
-				innerHtml = value;
+				innerHtml = String(value);
 				break;
 
 			default:
-				attributes += ` ${key}="${escapeHtml(value)}"`;
+				attributes += ` ${rawKey}="${escapeHtml(String(value))}"`;
 				break;
 		}
 	}

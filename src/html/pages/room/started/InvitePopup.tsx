@@ -54,6 +54,13 @@ export function InvitePopup(props: { user: User, room: Room })
 				{props.room.id}
 			</span>
 
+			<div>
+				Domain:
+				<span style='color: var(--color-accent)'>
+					{props.room.domainName}
+				</span>
+			</div>
+
 			<div style='display: flex; margin-top: 0.5rem'>
 				<button class='g-big'
 					style='width: 40%'

@@ -7,7 +7,7 @@ import { User } from '../../../data/user.ts';
 import { NickSection } from '@html/pages/home/NickSection.tsx';
 
 interface HomeProps {
-	user?: User;
+	user: User;
 }
 
 const styleSrc = path.join(import.meta.dirname!, 'style.css');
@@ -45,7 +45,7 @@ export function Home(props: HomeProps)
 						<button class='g-big' type='submit'>⎆</button>
 					</form>
 					
-					{props.user ? <NickSection nick={props.user.nick} /> : ''}
+					{<NickSection nick={props.user.nick} />}
 						
 				</div>
 			</main>

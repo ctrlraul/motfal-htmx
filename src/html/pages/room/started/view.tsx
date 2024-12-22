@@ -26,7 +26,7 @@ export function RoomStarted(props: RoomStartedProps)
 				<h3 style={style}>
 					<ArticleTitle
 						article={props.article}
-						preserveStyle={props.room.rulePreserveTitleStyle}
+						preserveStyle={props.room.rules.preserveTitleStyle}
 					/>
 				</h3>
 			</section>

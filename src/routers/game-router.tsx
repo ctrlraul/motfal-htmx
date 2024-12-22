@@ -9,13 +9,12 @@ import { ArticleSubmitted } from '@html/pages/room/liar/ArticleSubmitted.tsx';
 import { Room } from '@html/pages/room/page.tsx';
 import { ArticlesHelper } from '../articles/articles-helper.ts';
 import { jsx, render } from 'jsx';
-import { WikipediaOrg } from '../articles/domains/wikipedia.org.ts';
 import { RoomStarted } from '@html/pages/room/started/view.tsx';
 import { NickSection } from '@html/pages/home/NickSection.tsx';
 
 
-const NICK_LENGTH_MAX = 32;
-const ARTICLE_SUGGESTIONS_PER_REQUEST = 16;
+const NickLengthMax = 32;
+const ArticlesPerRequest = 16;
 
 const router = new Router<{
 	session: Session,
@@ -54,7 +53,7 @@ router.get('/nick-change', ctx => {
 				name='nick'
 				placeholder='New nick'
 				value={ctx.state.session.user.nick}
-				max={NICK_LENGTH_MAX}/>
+				max={NickLengthMax}/>
 
 			<button class='cancel' type='submit'>
 				Cancel
@@ -71,7 +70,7 @@ router.post('/nick-change', async ctx => {
 	
 	const { user } = ctx.state.session;
 	const form = await ctx.request.body.form();
-	const nick = (form.get('nick') || '').slice(0, NICK_LENGTH_MAX);
+	const nick = (form.get('nick') || '').slice(0, NickLengthMax);
 
 	if (nick != '' && nick != user.nick)
 		ctx.state.session.save(ctx, { nick });
@@ -96,31 +95,38 @@ router.post('/make', async ctx => {
 
 	const { user } = ctx.state.session;
 	const form = await ctx.request.body.form();
-	const previousRoom = RoomsManager.getUserRoom(user.id);
 
-	const ruleAnyNamespace = form.get('any-namespace-checkbox') == 'on';
-	const rulePreserveTitleStyle = form.get('preserve-title-style-checkbox') === 'on';
-	const invitePreviousRoom = form.get('invite') === 'on';
-	const usersLimit = form.get('users-limit-checkbox') === 'on'
-		? parseInt(form.get('users-limit-input')!) || 0
-		: 0;
+	const domainName = form.get('domain');
+	const limitUsers = form.get('limit-users') === 'on';
+	const usersLimit = parseInt(String(form.get('users-limit'))) || 0;
+	const invite     = form.get('invite') === 'on';
 
-	if (usersLimit !== 0 && usersLimit < 3)
-		throw new Error(`Invalid users limit: ${usersLimit}`);
-
-	const room = RoomsManager.createRoom(
-		user,
-		ruleAnyNamespace,
-		rulePreserveTitleStyle,
-		usersLimit
-	);
-
-	if (previousRoom != null)
+	if (!ArticlesHelper.isDomainRegistered(domainName))
 	{
-		RoomsManager.removeUserFromRoom(previousRoom, user.id);
+		ctx.response.status = Status.BadRequest;
+		ctx.response.body = 'Invalid domain';
+		return;
+	}
 
-		if (invitePreviousRoom && previousRoom.currentArticle != -1)
-			RoomsManager.inviteToNewRoom(previousRoom, user, room);
+	if (limitUsers && usersLimit < 3)
+	{
+		ctx.response.status = Status.BadRequest;
+		ctx.response.body = 'Invalid users limit';
+		return;
+	}
+
+	const rules = ArticlesHelper.createRules(domainName!, form);
+	const oldRoom = RoomsManager.getUserRoom(user.id);
+	const newRoom = RoomsManager.createRoom(user, domainName!, rules, usersLimit);
+
+	console.log(rules);
+
+	if (oldRoom)
+	{
+		RoomsManager.removeUserFromRoom(oldRoom, user.id);
+
+		if (invite && oldRoom.currentArticle != -1)
+			RoomsManager.inviteToNewRoom(oldRoom, user, newRoom);
 	}
 	
 	ctx.response.redirect('/room');
@@ -204,14 +210,16 @@ router.get('/suggestions', async ctx => {
 		return;
 	}
 
-	const articles = await WikipediaOrg.getRandomArticles(ARTICLE_SUGGESTIONS_PER_REQUEST, [
-		0 // Main namespace (articles)
-	]);
+	const articleInfos = await ArticlesHelper.getRandomArticles(
+		room.domainName,
+		ArticlesPerRequest,
+		room.rules
+	);
 
 	ctx.response.type = 'text/html';
 	ctx.response.body = render(
-		articles.map(article =>
-			<SuggestionsListItem title={article.title} />
+		articleInfos.map(info =>
+			<SuggestionsListItem {...info} />
 		)
 	);
 });
@@ -269,13 +277,13 @@ router.post('/submit', async ctx => {
 	if (!link)
 		throw new Error('Link can\'t be empty');
 
-	const articleData = await ArticlesHelper.get(link);
+	const article = await ArticlesHelper.getArticle(room.domainName, link);
 
-	RoomsManager.addArticleToUserInRoom(room, user.id, articleData);
+	RoomsManager.addArticleToUserInRoom(room, user.id, article);
 
 	ctx.response.type = 'text/html';
 	ctx.response.body = render(
-		<ArticleSubmitted room={room} articleData={articleData} />
+		<ArticleSubmitted room={room} article={article} />
 	);
 });
 

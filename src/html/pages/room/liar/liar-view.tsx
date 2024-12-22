@@ -4,6 +4,7 @@ import { LoadingSpinner } from '@html/components/loading-spinner.tsx';
 import { ArticleSubmitted } from '@html/pages/room/liar/ArticleSubmitted.tsx';
 import { Style } from '@html/components/style.tsx';
 import path from 'node:path';
+import { ArticlesHelper } from '../../../../articles/articles-helper.ts';
 
 
 interface LiarViewProps {
@@ -15,15 +16,16 @@ interface LiarViewProps {
 export function LiarView(props: LiarViewProps)
 {
 	const article = props.room.articles.find(article => article.userId == props.userId);
+	const domain = ArticlesHelper.getDomain(props.room.domainName)!;
 
 	if (article)
-		return <ArticleSubmitted room={props.room} articleData={article} />
+		return <ArticleSubmitted room={props.room} article={article} />
 
 	return (
 		<>
 			<section class='submit std-box'>
 				
-				<div>Submit an article</div>
+				<div>Submit {domain.itemName}</div>
 
 				<form hx-post='/submit'
 					hx-target='#room-view'
@@ -35,7 +37,7 @@ export function LiarView(props: LiarViewProps)
 						type='text'
 						id='suggestionLink'
 						name='link'
-						placeholder='https://wikipedia.org/wiki/Placeholder'
+						placeholder={domain.submitInputPlaceholder}
 						required />
 
 					<button class='g-big'>Submit</button>

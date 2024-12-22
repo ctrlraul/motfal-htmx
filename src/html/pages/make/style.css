@@ -3,29 +3,76 @@ main {
 }
 
 
-main > .std-box-pop {
+section > .header {
+	text-align: center;
+	margin-bottom: 0.5rem;
+}
+
+section > .items {
 	display: flex;
-	padding: 0.5rem;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+
+label.option {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.25rem 0.5rem;
+	width: 100%;
+	height: 2rem;
+	background-color: var(--color-background);
+	border-radius: var(--radius-common);
+}
+
+
+section.rules {
+	display: flex;
+	flex: 1;
 	flex-direction: column;
 }
 
-label {
-	padding: 0.5rem;
-	width: 100%;
+section.rules > .items {
+	flex: 1;
+	flex-direction: column;
 }
 
+section.rules > .items > .checkboxes {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	flex: 1;
+	overflow-y: scroll;
+}
 
+section.rules .limit-container {
+	display: flex;
+	align-items: center;
+	gap: inherit;
+	height: 2.25rem;
+}
+
+section.rules .limit-container label {
+	flex: 1;
+	width: initial;
+}
+
+section.rules .limit-container input[type='number'] {
+	width: 3rem;
+}
+
+section.rules .limit-container > * {
+	height: 100%;
+}
+
+/*
 input[type='checkbox'] {
 	margin-right: 0.5rem;
-}
+} */
 
 
-.rules hr {
-	width: 100%;
-}
-
-
-button {
+button.make {
 	margin: 1rem;
 }
 

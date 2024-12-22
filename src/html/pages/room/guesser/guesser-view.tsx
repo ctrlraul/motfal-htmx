@@ -12,7 +12,7 @@ export function GuesserView(props: { room: Room })
 		<>
 			<section class='center'>
 				<ArticlesCounter
-					count={props.room.articles.length}
+					room={props.room}
 					swappingExistent={false}
 				/>
 				<StartButton room={props.room} swappingExistent={false} />

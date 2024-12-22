@@ -1,6 +1,5 @@
-import { RoomHeader } from './RoomHeader.tsx';
-import { RulesPopup } from '@html/pages/room/rules-popup.tsx';
-import { Root } from '../../Root.tsx';
+import { RoomHeader } from '@html/pages/room/RoomHeader.tsx';
+import { Root } from '@html/Root.tsx';
 import { LiarView } from '@html/pages/room/liar/liar-view.tsx';
 import { GuesserView } from '@html/pages/room/guesser/guesser-view.tsx';
 import { Script } from '@html/components/script.tsx';
@@ -9,6 +8,7 @@ import { Room as TRoom } from '../../../data/room.ts';
 import { jsx } from 'jsx';
 import { Json } from '@html/components/Json.tsx';
 import { RoomStarted } from '@html/pages/room/started/view.tsx';
+import { RulesPopup } from '@html/pages/room/RulesPopup.tsx';
 
 interface RoomProps {
 	room: TRoom;

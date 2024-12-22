@@ -1,13 +1,16 @@
-import { jsx } from 'jsx';
+import { jsx, JsxElement } from 'jsx';
+import { capitalCase } from 'change-case';
+import { ArticlesHelper } from '../../../../articles/articles-helper.ts';
+import { Room } from '../../../../data/room.ts';
 
 
 interface ArticlesCounterProps {
-	count: number;
+	room: Room;
 	swappingExistent?: boolean;
 }
 
 
-const id = 'articles-counter';
+const id = 'items-counter';
 
 
 export function ArticlesCounter(props: ArticlesCounterProps)
@@ -15,20 +18,17 @@ export function ArticlesCounter(props: ArticlesCounterProps)
 	if (props.swappingExistent == undefined)
 		props.swappingExistent = true;
 
-	const text = `${props.count} Article${props.count === 1 ? '' : 's'} submitted`;
+	const count = props.room.articles.length;
+	const domain = ArticlesHelper.getDomain(props.room.domainName)!;
 
-	if (props.swappingExistent)
-	{
-		return (
-			<span id={id} hx-swap-oob={'outerHTML:#' + id} style='font-size: 1.2rem;'>
-				{text}
-			</span>
-		);
-	}
-
-	return (
+	const element: JsxElement = (
 		<span id={id} style='font-size: 1.2rem;'>
-			{text}
+			{count} {capitalCase(domain.itemName + (count === 1 ? '' : 's'))} submitted
 		</span>
 	);
+
+	if (props.swappingExistent)
+		element.attributes['hx-swap-oob'] = 'outerHTML:#' + id;
+
+	return element;
 }

@@ -14,7 +14,7 @@ export function RoomHeader(props: RoomHeaderProps) {
 				<div style='font-weight: 700;'>
 					Room 
 					<span style='color: var(--color-accent); opacity: 0.8;'>
-						{props.room.id}
+						{props.room.id} ({props.room.domainName})
 					</span>
 				</div>
 
