@@ -219,8 +219,6 @@
     ],
     "packageJson": {
       "dependencies": [
-        "npm:axios@^1.7.9",
-        "npm:change-case@^5.4.4",
         "npm:htmlparser2@^9.1.0"
       ]
     }
