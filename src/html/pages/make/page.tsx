@@ -114,7 +114,7 @@ function RulesSection()
 						<input type='checkbox'
 							name='limit-users'
 							onclick='limitInput.hidden = !this.checked'
-							omit:checked={limitUsers} />
+							checked={limitUsers || undefined} />
 						
 						Participants limit
 					</label>
