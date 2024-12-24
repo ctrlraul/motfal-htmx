@@ -13,10 +13,10 @@ const voidElements: Set<string> = new Set(['area', 'base', 'br', 'col', 'embed',
 const indentChar = '\t';
 
 
-const prefixes: Map<string, (key: string, value: unknown) => string> = new Map();
+// const prefixes: Map<string, (key: string, value: unknown) => string> = new Map();
 
-// Omit an attribute if the value is falsy
-prefixes.set('omit', (key, value) => value ? ` ${key}="${value}"` : '');
+// // Omit an attribute if the value is falsy
+// prefixes.set('omit', (key, value) => value ? ` ${key}="${value}"` : '');
 
 
 
@@ -105,19 +105,22 @@ function renderElement(element: JsxElement, indent: string): string
 
 	for (const [rawKey, value] of Object.entries(element.attributes))
 	{
-		if (rawKey.indexOf(':') != -1)
-		{
-			const [prefix, key] = rawKey.split(':');
-			const handler = prefixes.get(prefix);
+		if (value === undefined)
+			continue;
 
-			if (handler)
-			{
-				attributes += handler(key, value);
-				continue;
-			}
+		// if (rawKey.indexOf(':') != -1)
+		// {
+		// 	const [prefix, key] = rawKey.split(':');
+		// 	const handler = prefixes.get(prefix);
 
-			// console.error(`Unhandled attribute prefix '${prefix}', attribute will be treated normally`);
-		}
+		// 	if (handler)
+		// 	{
+		// 		attributes += handler(key, value);
+		// 		continue;
+		// 	}
+
+		// 	// console.error(`Unhandled attribute prefix '${prefix}', attribute will be treated normally`);
+		// }
 
 		switch (rawKey)
 		{

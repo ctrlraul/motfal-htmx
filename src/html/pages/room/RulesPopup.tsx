@@ -33,7 +33,7 @@ function InputForRule(props: { domainName: string, id: string, value: boolean })
 
 	return (
 		<label>
-			<input type='checkbox' disabled omit:checked={props.value} />
+			<input type='checkbox' disabled checked={props.value || undefined} />
 			{rule.name}
 		</label>
 	)

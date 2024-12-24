@@ -76,7 +76,7 @@ function DomainsSection()
 			<div class='items'>
 				{ArticlesHelper.getDomains().map((domain, i) => (
 					<label class='option' onclick={onclick.replace('%domain%', domain.name)}>
-						<input type='radio' name='domain' value={domain.name} omit:checked={!i} />
+						<input type='radio' name='domain' value={domain.name} checked={!i || undefined} />
 						{domain.name}
 					</label>
 				))}
@@ -97,7 +97,7 @@ function RulesSection()
 				<div class='checkboxes'>
 					{ArticlesHelper.getDomains().map((domain, i) => 
 						domain.ruleSet.map(rule => (
-							<div data-domain={domain.name} omit:hidden={!!i}>
+							<div data-domain={domain.name} hidden={!!i || undefined}>
 								<label class='option'>
 									<input type='checkbox' name={rule.id} checked={rule.defaultValue} />
 									{rule.name}
