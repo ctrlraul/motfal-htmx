@@ -22,7 +22,7 @@ export function GuesserView(props: { room: Room })
 				<UsersList room={props.room} />
 			</section>
 
-			<section class='invite std-box g-foreground'>
+			<section class='invite std-box g-foreground g-round-footer-corners'>
 				<span>Invite</span>
 				<div>
 					<input type='text' id='invite-link'/>

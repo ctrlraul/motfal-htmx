@@ -13,17 +13,10 @@ export function MainHeader(props: BasicHeaderProps)
 			text-align: center;
 			padding: 0.5rem;
 		}
-
-		@media (min-width: 30rem) {
-			header.main {
-				border-bottom-left-radius: var(--radius-common);
-				border-bottom-right-radius: var(--radius-common);
-			}
-		}
 	`;
 
 	return (
-		<header class='main std-box g-foreground'>
+		<header class='main std-box g-foreground g-round-header-corners'>
 			<i>
 				{props.children || 'Most Of These Folks Are Lying'}
 			</i>

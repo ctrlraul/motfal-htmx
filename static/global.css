@@ -222,3 +222,17 @@ a {
 	opacity: 1;
 	transition: opacity 250ms ease-out;
 }
+
+
+
+@media (min-width: 30rem) {
+	.g-round-header-corners {
+		border-bottom-left-radius: var(--radius-common);
+		border-bottom-right-radius: var(--radius-common);
+	}
+
+	.g-round-footer-corners {
+		border-top-left-radius: var(--radius-common);
+		border-top-right-radius: var(--radius-common);
+	}
+}
