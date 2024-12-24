@@ -1,5 +1,5 @@
 import { jsx, JsxElement } from 'jsx';
-import { capitalCase } from 'change-case';
+import * as Case from '@wok/case';
 import { ArticlesHelper } from '../../../../articles/articles-helper.ts';
 import { Room } from '../../../../data/room.ts';
 
@@ -23,7 +23,7 @@ export function ArticlesCounter(props: ArticlesCounterProps)
 
 	const element: JsxElement = (
 		<span id={id} style='font-size: 1.2rem;'>
-			{count} {capitalCase(domain.itemName + (count === 1 ? '' : 's'))} submitted
+			{count} {Case.titleCase(domain.itemName + (count === 1 ? '' : 's'))} submitted
 		</span>
 	);
 

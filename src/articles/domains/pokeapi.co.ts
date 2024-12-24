@@ -1,7 +1,7 @@
 import { Article } from '../../data/article.ts';
 import { ItemSuggestion, Domain, Rules } from '../articles-helper.ts';
-import { kebabCase, capitalCase } from 'change-case';
-import Axios from 'axios';
+import * as Case from '@wok/case';
+import Axios from 'axiod';
 
 
 interface ApiResponsePokemonSecies {
@@ -125,7 +125,7 @@ async function getArticle(id: string): Promise<Article>
 	const article: Article = {
 		description: response.data.name + ' is a pokemon!',
 		italic: false,
-		link: axios.getUri({ url: '/pokemon/' + response.data.id }),
+		link: new URL('/pokemon/' + response.data.id, apiBaseUrl).href,
 		title: response.data.name,
 		thumbnail: response.data.sprites.front_default,
 	}
@@ -147,7 +147,7 @@ async function getRandomArticles(count: number, _rules: Rules): Promise<ItemSugg
 	
 	const suggestions: ItemSuggestion[] = responses.map(response => ({
 		id: response.data.id.toString(),
-		title: capitalCase(response.data.name),
+		title: Case.titleCase(response.data.name),
 		search: 'https://www.pokemon.com/us/pokedex/' + response.data.id,
 	}));
 
@@ -161,7 +161,7 @@ function parsePokemonId(id: string): string
 	{
 		const pathSegments = id.split('/');
 		const encodedTitle = pathSegments[pathSegments.length - 1];
-		return kebabCase(decodeURIComponent(encodedTitle));
+		return Case.paramCase(decodeURIComponent(encodedTitle));
 	}
 
 	const int = parseInt(id);
@@ -169,7 +169,7 @@ function parsePokemonId(id: string): string
 	if (!isNaN(int))
 		return int.toString();
 
-	return kebabCase(id);
+	return Case.paramCase(id);
 }
 
 

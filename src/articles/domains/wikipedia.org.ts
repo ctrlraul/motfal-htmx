@@ -1,6 +1,6 @@
 import { Article } from '../../data/article.ts';
 import { ItemSuggestion, Domain, Rules } from '../articles-helper.ts';
-import Axios from 'axios';
+import Axios from 'axiod';
 
 
 interface ArticlesResponse {
@@ -47,7 +47,7 @@ async function getArticle(id: string): Promise<Article>
 	const pageData: any = Object.values(response.data.query.pages)[0];
 
 	const article: Article = {
-		link: axios.getUri({ url: '/wiki/' + title }),
+		link: new URL('wiki/' + title, apiBaseUrl).href,
 		title: response.data.query.redirects ? response.data.query.redirects[0].from : pageData.title,
 		description: pageData.extract,
 		thumbnail: pageData.thumbnail ? pageData.thumbnail.source : null,
@@ -63,25 +63,20 @@ async function getRandomArticles(count: number, _rules: Rules): Promise<ItemSugg
 		0 // Articles namespace
 	];
 
-	const baseURL = 'https://en.wikipedia.org/w/api.php';
-	const url = new URL(baseURL);
-	const params = new URLSearchParams({
-		action: 'query',
-		generator: 'random',
-		grnnamespace: namespaces.join('|'),
-		grnlimit: count.toString(),
-		format: 'json',
-		origin: '*' // Handle CORS
+	const response = await axios.get<ArticlesResponse>('/w/api.php', {
+		params: {
+			action: 'query',
+			generator: 'random',
+			grnnamespace: namespaces.join('|'),
+			grnlimit: count.toString(),
+			format: 'json',
+			origin: '*' // Handle CORS
+		}
 	});
 
-	url.search = params.toString();
-
-	const response = await fetch(url.href);
-	const data: ArticlesResponse = await response.json();
-
-	const suggestions: ItemSuggestion[] = Object.values(data.query.pages).map(item => ({
+	const suggestions: ItemSuggestion[] = Object.values(response.data.query.pages).map(item => ({
 		id: item.title,
-		search: axios.getUri({ url: '/wiki/' + item.title }),
+		search: new URL('wiki/' + item.title, apiBaseUrl).href,
 		title: item.title,
 	}));
 

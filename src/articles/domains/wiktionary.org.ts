@@ -1,6 +1,6 @@
 import { Article } from '../../data/article.ts';
 import { ItemSuggestion, Domain, Rules } from '../articles-helper.ts';
-import Axios from 'axios';
+import Axios from 'axiod';
 
 
 interface ArticlesResponse {
@@ -43,7 +43,7 @@ async function getArticle(id: string): Promise<Article>
 	// deno-lint-ignore no-explicit-any
 	const pageData: any = Object.values(response.data.query.pages)[0];
 	const articleData: Article = {
-		link: axios.getUri({ url: '/wiki/' + title }),
+		link: new URL('wiki/' + title, apiBaseUrl).href,
 		title: response.data.query.redirects ? response.data.query.redirects[0].from : pageData.title,
 		description: pageData.extract,
 		thumbnail: '',
@@ -72,7 +72,7 @@ async function getRandomArticles(amount: number, _rules: Rules): Promise<ItemSug
 
 	const suggestions: ItemSuggestion[] = Object.values(response.data.query.pages).map(item => ({
 		id: item.title,
-		search: axios.getUri({ url: '/wiki/' + item.title }),
+		search: new URL('wiki/' + item.title, apiBaseUrl).href,
 		title: item.title,
 	}));
 
