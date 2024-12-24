@@ -18,11 +18,11 @@ export function GuesserView(props: { room: Room })
 				<StartButton room={props.room} swappingExistent={false} />
 			</section>
 			
-			<section class='users std-box-pop g-foreground'>
+			<section class='users g-box-pop g-foreground'>
 				<UsersList room={props.room} />
 			</section>
 
-			<section class='invite std-box g-foreground g-round-footer-corners'>
+			<section class='invite g-box g-foreground g-round-footer-corners'>
 				<span>Invite</span>
 				<div>
 					<input type='text' id='invite-link'/>

@@ -8,7 +8,7 @@ export interface RoomHeaderProps {
 
 export function RoomHeader(props: RoomHeaderProps) {
 	return (
-		<header class='std-box g-foreground g-round-header-corners' style='display: flex;'>
+		<header class='g-box g-foreground g-round-header-corners' style='display: flex;'>
 
 			<div style='flex: 1;'>
 				<div style='font-weight: 700;'>

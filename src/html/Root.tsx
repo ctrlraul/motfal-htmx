@@ -23,7 +23,7 @@ export function Root(props: RootProps) {
 			</head>
 			<body hx-ext='sse' sse-connect='/sse'>
 				<div id='root'>
-					<div class='content-width'>
+					<div class='g-content-width'>
 						{props.children}
 					</div>
 				</div>

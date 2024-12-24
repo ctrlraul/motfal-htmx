@@ -16,7 +16,7 @@ export function MainHeader(props: BasicHeaderProps)
 	`;
 
 	return (
-		<header class='main std-box g-foreground g-round-header-corners'>
+		<header class='main g-box g-foreground g-round-header-corners'>
 			<i>
 				{props.children || 'Most Of These Folks Are Lying'}
 			</i>

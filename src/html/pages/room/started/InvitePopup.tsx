@@ -42,7 +42,7 @@ const css = /*css*/`
 export function InvitePopup(props: { user: User, room: Room })
 {
 	return (
-		<div id='invitePopup' class="std-box-pop g-foreground">
+		<div id='invitePopup' class="g-box-pop g-foreground">
 
 			<span style='color: var(--color-accent)'>
 				{props.user.nick}

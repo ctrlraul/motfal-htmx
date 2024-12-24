@@ -20,7 +20,7 @@ export function Home(props: HomeProps)
 			<MainHeader>MoþFAL</MainHeader>
 
 			<main>
-				<div class='content std-box'>
+				<div class='content g-box'>
 					<button class='g-big create'
 						hx-get='/make'
 						hx-target='#root'

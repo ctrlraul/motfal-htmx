@@ -31,7 +31,7 @@ export function RoomStarted(props: RoomStartedProps)
 				</h3>
 			</section>
 			
-			<div class='std-box'>
+			<div class='g-box'>
 				<button class='g-big create'
 					hx-get='/make'
 					hx-target='#root'

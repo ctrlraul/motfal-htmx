@@ -28,7 +28,7 @@ export function MakeRoom(props: MakeRoomProps)
 				<RulesSection />
 			
 				{props.currentRoom ? (
-					<div class='std-box-pop g-foreground'>
+					<div class='g-box-pop g-foreground'>
 						<label class='option'>
 							<input type='checkbox' name='invite' checked />
 							Invite previous room
@@ -70,7 +70,7 @@ function DomainsSection()
 	`;
 
 	return (
-		<section class='domains std-box-pop g-foreground'>
+		<section class='domains g-box-pop g-foreground'>
 			<div class='header'>Domain</div>
 
 			<div class='items'>
@@ -89,7 +89,7 @@ function DomainsSection()
 function RulesSection()
 {
 	return (
-		<section class='rules std-box-pop g-foreground'>
+		<section class='rules g-box-pop g-foreground'>
 
 			<div class='header'>Rules</div>
 			

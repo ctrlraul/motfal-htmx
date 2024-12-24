@@ -21,7 +21,7 @@ export function ArticleSubmitted(props: ArticleSubmittedProps)
 	
 	return (
 		<div style={style}>
-			<div class="std-box">
+			<div class="g-box">
 				<div>You submitted</div>
 				<span>
 					<a href={props.article.link} target='_blank' style='color: inherit'>

@@ -23,7 +23,7 @@ export function LiarView(props: LiarViewProps)
 
 	return (
 		<>
-			<section class='submit std-box'>
+			<section class='submit g-box'>
 				
 				<div>Submit {domain.itemName}</div>
 
@@ -44,7 +44,7 @@ export function LiarView(props: LiarViewProps)
 				</form>
 			</section>
 			
-			<section class='suggestions std-box g-foreground'>
+			<section class='suggestions g-box g-foreground'>
 				<div style='display: flex'>
 					<span style='flex: 1'>Suggestions</span>
 					<button hx-get='/suggestions'

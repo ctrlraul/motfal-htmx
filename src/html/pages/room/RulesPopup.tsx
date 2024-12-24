@@ -12,7 +12,7 @@ export function RulesPopup(props: { room: Room })
 
 	return (
 		<div id='rulesPopup' hx-on:click='this.hidden = true' hidden>
-			<div class='std-box-pop g-foreground'>
+			<div class='g-box-pop g-foreground'>
 				
 				<span>Rules</span>
 

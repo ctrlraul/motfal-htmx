@@ -32,7 +32,7 @@ body {
 	justify-content: center;
 }
 
-.content-width {
+.g-content-width {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
@@ -131,19 +131,19 @@ input[type='text'].g-big {
 }
 
 
-.std-box {
+.g-box {
 	width: 100%;
 	padding: 1rem;
 }
 
-.std-box-pop {
+.g-box-pop {
 	width: calc(100% - 2rem);
 	padding: 1rem;
 	margin: 1rem;
 	border-radius: var(--radius-common);
 }
 
-.std-box-pop + .std-box-pop {
+.g-box-pop + .g-box-pop {
 	margin-top: 0;
 }
 
