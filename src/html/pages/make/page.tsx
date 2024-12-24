@@ -99,7 +99,7 @@ function RulesSection()
 						domain.ruleSet.map(rule => (
 							<div data-domain={domain.name} hidden={!!i || undefined}>
 								<label class='option'>
-									<input type='checkbox' name={rule.id} checked={rule.defaultValue} />
+									<input type='checkbox' name={domain.name + '-' + rule.id} checked={rule.defaultValue} />
 									{rule.name}
 								</label>
 							</div>

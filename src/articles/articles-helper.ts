@@ -59,7 +59,7 @@ function createRules(domainName: string, params: URLSearchParams): Rules
 
 	for (const rule of ruleSet)
 	{
-		const param = params.get(rule.id);
+		const param = params.get(domainName + '-' + rule.id);
 		rules[rule.id] = param === 'on';
 	}
 
