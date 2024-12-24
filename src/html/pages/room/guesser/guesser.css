@@ -91,6 +91,11 @@ section.invite > div > input {
 	flex: 1;
 }
 
+
+#invite-link {
+	font-size: 90%;
+}
+
 #copy-invite-button {
 	padding: 0.5rem;
 }
