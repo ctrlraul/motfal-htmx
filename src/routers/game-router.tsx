@@ -119,8 +119,6 @@ router.post('/make', async ctx => {
 	const oldRoom = RoomsManager.getUserRoom(user.id);
 	const newRoom = RoomsManager.createRoom(user, domainName!, rules, usersLimit);
 
-	console.log(rules);
-
 	if (oldRoom)
 	{
 		RoomsManager.removeUserFromRoom(oldRoom, user.id);
