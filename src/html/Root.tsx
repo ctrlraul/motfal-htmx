@@ -22,8 +22,8 @@ export function Root(props: RootProps) {
 				<script src='https://unpkg.com/htmx-ext-sse@2.2.2/sse.js'></script>
 			</head>
 			<body hx-ext='sse' sse-connect='/sse'>
-				<div class='content-width'>
-					<div id='root'>
+				<div id='root'>
+					<div class='content-width'>
 						{props.children}
 					</div>
 				</div>

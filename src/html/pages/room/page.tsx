@@ -50,7 +50,7 @@ export function Room(props: RoomProps)
 
 			<Script src={scriptSrc} />
 
-			<div hidden sse-swap='Kicked' hx-target='#root'></div>
+			<div hidden sse-swap='Kicked' hx-target='#root' hx-swap='outerHTML'></div>
 			<div hidden sse-swap='Started' hx-target='#room-view'></div>
 			<div hidden sse-swap='Invited' hx-target='main' hx-swap='beforeend'></div>
 		</Root>
