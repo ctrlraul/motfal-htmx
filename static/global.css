@@ -147,12 +147,6 @@ input[type='text'].g-big {
 	margin-top: 0;
 }
 
-.center-horizontally {
-	width: 100%;
-	display: flex;
-	justify-content: center;
-}
-
 .g-foreground {
 	background-color: var(--color-foreground);
 }
