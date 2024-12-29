@@ -10,14 +10,6 @@ export interface JsxElement {
 
 
 const voidElements: Set<string> = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr']);
-const indentChar = '\t';
-
-
-// const prefixes: Map<string, (key: string, value: unknown) => string> = new Map();
-
-// // Omit an attribute if the value is falsy
-// prefixes.set('omit', (key, value) => value ? ` ${key}="${value}"` : '');
-
 
 
 function jsx(tag: unknown, attributes: Record<string, unknown> | null, ...children: JsxElement[]): JsxElement | JsxElement[]
@@ -54,7 +46,7 @@ function render(element: unknown, indent: string = ''): string
 	
 	// Handle Element
 	if (typeof element === 'object' && element !== null)
-		return renderElement(element as JsxElement, indent);
+		return renderElement(element as JsxElement);
 
 	return String(element);
 }
@@ -94,11 +86,9 @@ function toJsxElement(node: ReturnType<typeof parseDocument>['children'][number]
 	return null;
 }
 
-function renderElement(element: JsxElement, indent: string): string
+function renderElement(element: JsxElement): string
 {
-	const { tag } = element as JsxElement;
-
-	// Process attributes
+	const { tag } = element;
 
 	let attributes: string = '';
 	let innerHtml: string | null = null;
@@ -108,25 +98,8 @@ function renderElement(element: JsxElement, indent: string): string
 		if (value === undefined)
 			continue;
 
-		// if (rawKey.indexOf(':') != -1)
-		// {
-		// 	const [prefix, key] = rawKey.split(':');
-		// 	const handler = prefixes.get(prefix);
-
-		// 	if (handler)
-		// 	{
-		// 		attributes += handler(key, value);
-		// 		continue;
-		// 	}
-
-		// 	// console.error(`Unhandled attribute prefix '${prefix}', attribute will be treated normally`);
-		// }
-
 		switch (rawKey)
 		{
-			case 'DANGEROUSLY_SET_OUTER_HTML':
-				return String(value);
-			
 			case 'DANGEROUSLY_SET_INNER_HTML':
 				innerHtml = String(value);
 				break;
@@ -137,16 +110,15 @@ function renderElement(element: JsxElement, indent: string): string
 		}
 	}
 
-	const nextIndent: string = indent + indentChar;
-	const content: string = innerHtml ? innerHtml : element.children.map(item => render(item, nextIndent)).join('\n');
+	const content: string = innerHtml ? innerHtml : element.children.map(item => render(item)).join('');
 
 	if (voidElements.has(tag) && content.length === 0)
-		return `${indent}<${tag}${attributes} />`;
+		return `<${tag}${attributes} />`;
 	
 	if (content.length === 0)
-		return `${indent}<${tag}${attributes}></${tag}>`;
+		return `<${tag}${attributes}></${tag}>`;
 
-	return `${indent}<${tag}${attributes}>${content}${indent}</${tag}>`;
+	return `<${tag}${attributes}>${content}</${tag}>`;
 }
 
 
