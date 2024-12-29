@@ -148,7 +148,7 @@ async function getRandomArticles(count: number, _rules: Rules): Promise<ItemSugg
 	const suggestions: ItemSuggestion[] = responses.map(response => ({
 		id: response.data.id.toString(),
 		title: Case.titleCase(response.data.name),
-		search: 'https://www.pokemon.com/us/pokedex/' + response.data.id,
+		search: 'https://www.pokemon.com/us/pokedex/' + response.data.name,
 	}));
 
 	return suggestions;
