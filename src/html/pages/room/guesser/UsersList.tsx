@@ -1,7 +1,7 @@
 import { jsx, Fragment } from 'jsx';
 import { Room } from '../../../../data/room.ts';
-import { UsersListItem } from '@html/pages/room/guesser/users-list-item.tsx';
-import { UsersCount } from '@html/pages/room/guesser/users-count.tsx';
+import { UsersListItem } from '@html/pages/room/guesser/UsersListItem.tsx';
+import { UsersCount } from '@html/pages/room/guesser/UsersCount.tsx';
 
 export function UsersList(props: { room: Room })
 {

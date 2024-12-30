@@ -1,13 +1,13 @@
 import { RoomHeader } from '@html/pages/room/RoomHeader.tsx';
 import { Root } from '@html/Root.tsx';
-import { LiarView } from '@html/pages/room/liar/liar-view.tsx';
-import { GuesserView } from '@html/pages/room/guesser/guesser-view.tsx';
-import { Script } from '@html/components/script.tsx';
+import { LiarView } from '@html/pages/room/liar/LiarView.tsx';
+import { GuesserView } from '@html/pages/room/guesser/GuesserView.tsx';
+import { Script } from '@html/components/Script.tsx';
 import path from 'node:path';
 import { Room as TRoom } from '../../../data/room.ts';
 import { jsx } from 'jsx';
 import { Json } from '@html/components/Json.tsx';
-import { RoomStarted } from '@html/pages/room/started/view.tsx';
+import { RoomStarted } from '@html/pages/room/started/StartedView.tsx';
 import { RulesPopup } from '@html/pages/room/RulesPopup.tsx';
 
 interface RoomProps {

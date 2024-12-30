@@ -1,15 +1,15 @@
 import { Router, Status } from '@oak/oak';
-import { Home } from '@html/pages/home/page.tsx';
+import { Home } from '@html/pages/home/Page.tsx';
 import { Rules } from '@html/pages/rules/page.tsx';
-import { MakeRoom } from '../html/pages/make/page.tsx';
+import { MakeRoom } from '@html/pages/make/Page.tsx';
 import { RoomsManager } from '../managers/rooms-manager.tsx';
 import { Session, SessionParser } from '../middlewares/session-parser.ts';
-import { SuggestionsListItem } from '@html/pages/room/liar/suggestions-list-item.tsx';
+import { SuggestionsListItem } from '@html/pages/room/liar/SuggestionsListItem.tsx';
 import { ArticleSubmitted } from '@html/pages/room/liar/ArticleSubmitted.tsx';
-import { Room } from '@html/pages/room/page.tsx';
+import { Room } from '@html/pages/room/Page.tsx';
 import { ArticlesHelper } from '../articles/articles-helper.ts';
 import { jsx, render } from 'jsx';
-import { RoomStarted } from '@html/pages/room/started/view.tsx';
+import { RoomStarted } from '@html/pages/room/started/StartedView.tsx';
 import { NickSection } from '@html/pages/home/NickSection.tsx';
 
 

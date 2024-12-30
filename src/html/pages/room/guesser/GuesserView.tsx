@@ -1,6 +1,6 @@
 import path from 'node:path';
-import { UsersList } from '@html/pages/room/guesser/users-list.tsx';
-import { Style } from '@html/components/style.tsx';
+import { UsersList } from '@html/pages/room/guesser/UsersList.tsx';
+import { Style } from '@html/components/Style.tsx';
 import { Room } from '../../../../data/room.ts';
 import { jsx, Fragment } from 'jsx';
 import { ArticlesCounter } from '@html/pages/room/guesser/ArticlesCounter.tsx';

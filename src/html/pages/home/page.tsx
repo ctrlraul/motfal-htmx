@@ -1,11 +1,11 @@
 import path from 'node:path';
-import { Style } from '@html/components/style.tsx';
+import { Style } from '@html/components/Style.tsx';
 import { Root } from '@html/Root.tsx';
 import { MainHeader } from '@html/MainHeader.tsx';
 import { jsx } from 'jsx';
 import { User } from '../../../data/user.ts';
 import { NickSection } from '@html/pages/home/NickSection.tsx';
-import { LoadingSpinner } from '@html/components/loading-spinner.tsx';
+import { LoadingSpinner } from '@html/components/LoadingSpinner.tsx';
 
 interface HomeProps {
 	user: User;

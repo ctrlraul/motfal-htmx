@@ -1,6 +1,6 @@
-import { Root } from '../../Root.tsx';
-import { MainHeader } from '../../MainHeader.tsx';
-import { Style } from '@html/components/style.tsx';
+import { Root } from '@html/Root.tsx';
+import { MainHeader } from '@html/MainHeader.tsx';
+import { Style } from '@html/components/Style.tsx';
 import path from 'node:path';
 import { jsx } from 'jsx';
 

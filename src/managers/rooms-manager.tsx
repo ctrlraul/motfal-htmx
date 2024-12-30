@@ -1,4 +1,4 @@
-import { UsersCount } from '@html/pages/room/guesser/users-count.tsx';
+import { UsersCount } from '@html/pages/room/guesser/UsersCount.tsx';
 import { jsx, Fragment, render } from 'jsx';
 import { Article } from '../data/article.ts';
 import { Room } from '../data/room.ts';
@@ -6,11 +6,11 @@ import { User } from '../data/user.ts';
 import { Logger } from '../helpers/logger.ts';
 import { objectLength } from '../helpers/object-length.ts';
 import randomString from '../helpers/random-string.ts';
-import { getSwapString, UsersListItem } from '@html/pages/room/guesser/users-list-item.tsx';
+import { getSwapString, UsersListItem } from '@html/pages/room/guesser/UsersListItem.tsx';
 import { EventSender } from './event-sender.ts';
 import { ArticlesCounter } from '@html/pages/room/guesser/ArticlesCounter.tsx';
-import { Home } from '@html/pages/home/page.tsx';
-import { RoomStarted } from '@html/pages/room/started/view.tsx';
+import { Home } from '@html/pages/home/Page.tsx';
+import { RoomStarted } from '@html/pages/room/started/StartedView.tsx';
 import { StartButton } from '@html/pages/room/guesser/StartButton.tsx';
 import { InvitePopup } from '@html/pages/room/started/InvitePopup.tsx';
 

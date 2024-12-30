@@ -1,11 +1,11 @@
 import { Root } from '@html/Root.tsx';
 import { MainHeader } from '@html/MainHeader.tsx';
 import path from 'node:path';
-import { Style } from '@html/components/style.tsx';
+import { Style } from '@html/components/Style.tsx';
 import { jsx } from 'jsx';
 import { Room } from '../../../data/room.ts';
 import { ArticlesHelper } from '../../../articles/articles-helper.ts';
-import { LoadingSpinner } from '@html/components/loading-spinner.tsx';
+import { LoadingSpinner } from '@html/components/LoadingSpinner.tsx';
 
 
 interface MakeRoomProps {

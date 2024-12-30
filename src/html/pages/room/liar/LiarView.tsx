@@ -1,8 +1,8 @@
 import { jsx, Fragment } from 'jsx';
 import { Room } from '../../../../data/room.ts';
-import { LoadingSpinner } from '@html/components/loading-spinner.tsx';
+import { LoadingSpinner } from '@html/components/LoadingSpinner.tsx';
 import { ArticleSubmitted } from '@html/pages/room/liar/ArticleSubmitted.tsx';
-import { Style } from '@html/components/style.tsx';
+import { Style } from '@html/components/Style.tsx';
 import path from 'node:path';
 import { ArticlesHelper } from '../../../../articles/articles-helper.ts';
 

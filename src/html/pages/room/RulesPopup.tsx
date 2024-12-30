@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { Room } from '../../../data/room.ts';
-import { Style } from '@html/components/style.tsx';
+import { Style } from '@html/components/Style.tsx';
 import { jsx } from 'jsx';
 import { ArticlesHelper } from '../../../articles/articles-helper.ts';
 
