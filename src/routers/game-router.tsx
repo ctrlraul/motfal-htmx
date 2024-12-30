@@ -117,7 +117,7 @@ router.post('/make', async ctx => {
 
 	const rules = ArticlesHelper.createRules(domainName!, form);
 	const oldRoom = RoomsManager.getUserRoom(user.id);
-	const newRoom = RoomsManager.createRoom(user, domainName!, rules, usersLimit);
+	const newRoom = RoomsManager.createRoom(user, domainName!, rules, limitUsers ? usersLimit : 0);
 
 	if (oldRoom)
 	{
