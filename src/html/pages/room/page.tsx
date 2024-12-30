@@ -9,35 +9,36 @@ import { jsx } from 'jsx';
 import { Json } from '@html/components/Json.tsx';
 import { RoomStarted } from '@html/pages/room/started/StartedView.tsx';
 import { RulesPopup } from '@html/pages/room/RulesPopup.tsx';
+import { User } from '../../../data/user.ts';
 
 interface RoomProps {
 	room: TRoom;
-	userId: string;
+	user: User;
 }
 
 const scriptSrc = path.join(import.meta.dirname!, 'script.js');
 
 export function Room(props: RoomProps)
 {
-	const { room, userId } = props;
+	const { room, user } = props;
 
 	const dataForClient = {
 		roomId: room.id,
 		roomCreationTime: room.creationTime,
-		isGuesser: userId === room.guesserId,
+		isGuesser: user.id === room.guesserId,
 	};
 
 	let View;
 
 	if (room.currentArticle != -1)
 		View = <RoomStarted room={room} article={room.articles[room.currentArticle]} />;
-	else if (props.userId == room.guesserId)
+	else if (props.user.id == room.guesserId)
 		View = <GuesserView {...props} />;
 	else
 		View = <LiarView {...props} />;
 
 	return (
-		<Root title='MoþFAL - Room'>
+		<Root title='MoþFAL - Room' user={user}>
 			<Json id='data' data={dataForClient} />
 
 			<RoomHeader {...props} />

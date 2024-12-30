@@ -6,10 +6,12 @@ import { jsx } from 'jsx';
 import { Room } from '../../../data/room.ts';
 import { ArticlesHelper } from '../../../articles/articles-helper.ts';
 import { LoadingSpinner } from '@html/components/LoadingSpinner.tsx';
+import { User } from '../../../data/user.ts';
 
 
 interface MakeRoomProps {
 	currentRoom?: Room | null;
+	user: User;
 }
 
 
@@ -21,7 +23,7 @@ export function MakeRoom(props: MakeRoomProps)
 	const styleSrc = path.join(import.meta.dirname!, 'style.css');
 
 	return (
-		<Root title='MoþFAL - Make Room'>
+		<Root title='MoþFAL - Make Room' user={props.user}>
 			<MainHeader>Make Room</MainHeader>
 
 			<main>

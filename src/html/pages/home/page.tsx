@@ -3,9 +3,9 @@ import { Style } from '@html/components/Style.tsx';
 import { Root } from '@html/Root.tsx';
 import { MainHeader } from '@html/MainHeader.tsx';
 import { jsx } from 'jsx';
-import { User } from '../../../data/user.ts';
 import { NickSection } from '@html/pages/home/NickSection.tsx';
 import { LoadingSpinner } from '@html/components/LoadingSpinner.tsx';
+import { User } from '../../../data/user.ts';
 
 interface HomeProps {
 	user: User;
@@ -16,7 +16,8 @@ const styleSrc = path.join(import.meta.dirname!, 'style.css');
 export function Home(props: HomeProps)
 {
 	return (
-		<Root title='MoþFAL - Most of these Folks Are Lying'>
+		<Root title='MoþFAL - Most of these Folks Are Lying'
+			user={props.user}>
 
 			<MainHeader>MoþFAL</MainHeader>
 

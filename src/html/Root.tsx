@@ -1,8 +1,11 @@
 import { jsx } from 'jsx';
+import { CookiesPopup } from '@html/CookiesPopup.tsx';
+import { User } from '../data/user.ts';
 
 export interface RootProps {
 	title: string;
 	children?: unknown;
+	user: User;
 }
 
 export function Root(props: RootProps) {
@@ -27,6 +30,10 @@ export function Root(props: RootProps) {
 						{props.children}
 					</div>
 				</div>
+				
+				{props.user.acceptedCookies ? '' : (
+					<CookiesPopup />
+				)}
 			</body>
 		</html>	
 	)

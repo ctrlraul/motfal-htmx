@@ -5,17 +5,18 @@ import { ArticleSubmitted } from '@html/pages/room/liar/ArticleSubmitted.tsx';
 import { Style } from '@html/components/Style.tsx';
 import path from 'node:path';
 import { ArticlesHelper } from '../../../../articles/articles-helper.ts';
+import { User } from '../../../../data/user.ts';
 
 
 interface LiarViewProps {
 	room: Room;
-	userId: string;
+	user: User;
 }
 
 
 export function LiarView(props: LiarViewProps)
 {
-	const article = props.room.articles.find(article => article.userId == props.userId);
+	const article = props.room.articles.find(article => article.userId == props.user.id);
 	const domain = ArticlesHelper.getDomain(props.room.domainName)!;
 
 	if (article)

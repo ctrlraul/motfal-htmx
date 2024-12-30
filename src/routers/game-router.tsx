@@ -41,6 +41,24 @@ router.get('/', ctx => {
 	);
 });
 
+router.post('/cookies/accept', ctx => {
+	ctx.state.session.save(ctx, { acceptedCookies: true });
+	ctx.response.type = 'text/html';
+	ctx.response.body = '';
+});
+
+router.post('/cookies/reject', ctx => {
+
+	const { user } = ctx.state.session;
+	const room = RoomsManager.getUserRoom(user.id);
+
+	if (room)
+		RoomsManager.removeUserFromRoom(room, user.id);
+
+	ctx.cookies.set(SessionParser.cookieName, null);
+	ctx.response.headers.append('Hx-Redirect', 'https://www.google.com/');
+});
+
 router.get('/nick-change', ctx => {
 	ctx.response.type = 'text/html';
 	ctx.response.body = render(
@@ -81,14 +99,14 @@ router.post('/nick-change', async ctx => {
 
 router.get('/rules', ctx => {
 	ctx.response.type = 'text/html';
-	ctx.response.body = render(<Rules/>);
+	ctx.response.body = render(<Rules user={ctx.state.session.user}/>);
 });
 
 router.get('/make', ctx => {
 	const { user } = ctx.state.session;
 	const currentRoom = RoomsManager.getUserRoom(user.id);
 	ctx.response.type = 'text/html';
-	ctx.response.body = render(<MakeRoom currentRoom={currentRoom} />);
+	ctx.response.body = render(<MakeRoom currentRoom={currentRoom} user={user} />);
 });
 
 router.post('/make', async ctx => {
@@ -143,7 +161,7 @@ router.get('/room', ctx => {
 
 	ctx.response.type = 'text/html';
 	ctx.response.body = render(
-		<Room room={room} userId={user.id} />
+		<Room room={room} user={user} />
 	);
 });
 

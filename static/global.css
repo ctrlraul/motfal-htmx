@@ -153,6 +153,7 @@ input[type='text'].g-big {
 
 a {
 	text-decoration: none;
+	color: inherit;
 }
 
 
@@ -226,4 +227,34 @@ a {
 		border-top-left-radius: var(--radius-common);
 		border-top-right-radius: var(--radius-common);
 	}
+}
+
+
+
+#cookiesPopup {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: radial-gradient(circle at bottom left, rgba(55, 35, 73, 0), rgba(55, 35, 73, 0.5));
+}
+
+#cookiesPopup > div {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	border: 2px solid var(--color-text);
+	filter: drop-shadow(4px 4px 0px #50007030);
+    text-align: center;
+    max-width: 26rem;
+}
+
+#cookiesPopup > div .buttons {
+	display: flex;
+	margin-top: 0.5rem;
+}
+
+#cookiesPopup > div .spacer {
+	flex: 1;
 }

@@ -17,6 +17,7 @@ export class Session {
 		this.user = {
 			id: randomUUID(),
 			nick: generateNick(),
+			acceptedCookies: false,
 		};
 	}
 
@@ -63,5 +64,6 @@ function generateNick(): string {
 
 
 export const SessionParser = {
+	cookieName,
 	middleware,
 }

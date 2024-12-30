@@ -3,13 +3,14 @@ import { MainHeader } from '@html/MainHeader.tsx';
 import { Style } from '@html/components/Style.tsx';
 import path from 'node:path';
 import { jsx } from 'jsx';
+import { User } from '../../../data/user.ts';
 
 const styleSrc = path.join(import.meta.dirname!, 'style.css');
 
-export function Rules()
+export function Rules({ user }: { user: User })
 {
 	return (
-		<Root title='MoþFAL - How to play'>
+		<Root title='MoþFAL - How to play' user={user}>
 			<MainHeader>
 				How to play
 			</MainHeader>
