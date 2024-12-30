@@ -93,19 +93,19 @@ function renderElement(element: JsxElement): string
 	let attributes: string = '';
 	let innerHtml: string | null = null;
 
-	for (const [rawKey, value] of Object.entries(element.attributes))
+	for (const [key, value] of Object.entries(element.attributes))
 	{
 		if (value === undefined)
 			continue;
 
-		switch (rawKey)
+		switch (key)
 		{
 			case 'DANGEROUSLY_SET_INNER_HTML':
 				innerHtml = String(value);
 				break;
 
 			default:
-				attributes += ` ${rawKey}="${escapeHtml(String(value))}"`;
+				attributes += ` ${key}="${escapeHtml(String(value))}"`;
 				break;
 		}
 	}
@@ -115,8 +115,8 @@ function renderElement(element: JsxElement): string
 	if (voidElements.has(tag) && content.length === 0)
 		return `<${tag}${attributes} />`;
 	
-	if (content.length === 0)
-		return `<${tag}${attributes}></${tag}>`;
+	// if (content.length === 0)
+	// 	return `<${tag}${attributes}></${tag}>`;
 
 	return `<${tag}${attributes}>${content}</${tag}>`;
 }

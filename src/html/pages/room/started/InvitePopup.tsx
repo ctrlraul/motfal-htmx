@@ -45,19 +45,19 @@ export function InvitePopup(props: { user: User, room: Room })
 		<div id='invitePopup' class="g-box-pop g-foreground">
 
 			<span style='color: var(--color-accent)'>
-				{props.user.nick}
+				{props.user.nick + ' '}
 			</span>
 
 			<span>invited you to room</span>
 
 			<span style='color: var(--color-accent)'>
-				{props.room.id}
+				{' ' + props.room.id}
 			</span>
 
 			<div>
 				Domain:
 				<span style='color: var(--color-accent)'>
-					{props.room.domainName}
+					{' ' + props.room.domainName}
 				</span>
 			</div>
 
