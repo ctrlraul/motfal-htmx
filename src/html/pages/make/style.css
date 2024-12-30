@@ -59,7 +59,7 @@ section.rules .limit-container label {
 }
 
 section.rules .limit-container input[type='number'] {
-	width: 3rem;
+	width: 4.5rem;
 }
 
 section.rules .limit-container > * {
