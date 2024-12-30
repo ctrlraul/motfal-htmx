@@ -19,7 +19,13 @@ const scriptSrc = path.join(import.meta.dirname!, 'script.js');
 
 export function Room(props: RoomProps)
 {
-	const { room } = props;
+	const { room, userId } = props;
+
+	const dataForClient = {
+		roomId: room.id,
+		roomCreationTime: room.creationTime,
+		isGuesser: userId === room.guesserId,
+	};
 
 	let View;
 
@@ -32,7 +38,7 @@ export function Room(props: RoomProps)
 
 	return (
 		<Root title='MoþFAL - Room'>
-			<Json id='data' data={props} />
+			<Json id='data' data={dataForClient} />
 
 			<RoomHeader {...props} />
 

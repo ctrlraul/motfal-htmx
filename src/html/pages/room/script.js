@@ -2,15 +2,12 @@
 
 ;(() => {
 
-	const dataElement = document.getElementById('data');
-	const data = JSON.parse(dataElement.textContent);
-	const inviteLink = location.origin + '/join/' + data.room.id;
+	const data = JSON.parse(document.getElementById('data').textContent);
+	const inviteLink = location.origin + '/join/' + data.roomId;
 	const updateTimeIntervalMs = 5000;
 
 
-	dataElement.remove();
-
-	if (data.userId == data.room.guesserId)
+	if (data.isGuesser)
 	{
 		const inviteLinkOutput = document.getElementById('invite-link');
 		inviteLinkOutput.value = inviteLink;
@@ -28,7 +25,7 @@
 
 		if (span)
 		{
-			span.textContent = timeAgo(data.room.creationTime);
+			span.textContent = timeAgo(data.roomCreationTime);
 			setTimeout(updateTime, updateTimeIntervalMs);
 		}
 	}
