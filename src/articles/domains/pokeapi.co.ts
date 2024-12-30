@@ -112,6 +112,7 @@ interface ApiResponsePokemon {
 }
 
 
+const pokedexBaseUrl = 'https://www.pokemon.com/us/pokedex/';
 const apiBaseUrl = 'https://pokeapi.co/api/v2';
 const axios = Axios.create({ baseURL: apiBaseUrl });
 
@@ -123,12 +124,12 @@ async function getArticle(id: string): Promise<Article>
 	const parsedId = parsePokemonId(id); 
 	const response = await axios.get<ApiResponsePokemon>('/pokemon/' + parsedId);
 	const article: Article = {
-		description: response.data.name + ' is a pokemon!',
+		description: Case.titleCase(response.data.name) + ' is a pokemon!',
 		italic: false,
-		link: new URL('/pokemon/' + response.data.id, apiBaseUrl).href,
-		title: response.data.name,
+		link: pokedexBaseUrl + response.data.name,
+		title: Case.titleCase(response.data.name),
 		thumbnail: response.data.sprites.front_default,
-	}
+	};
 
 	return article;
 }
@@ -146,9 +147,9 @@ async function getRandomArticles(count: number, _rules: Rules): Promise<ItemSugg
 	const responses = await Promise.all(promises);
 	
 	const suggestions: ItemSuggestion[] = responses.map(response => ({
-		id: response.data.id.toString(),
+		id: Case.titleCase(response.data.name),
 		title: Case.titleCase(response.data.name),
-		search: 'https://www.pokemon.com/us/pokedex/' + response.data.name,
+		search: pokedexBaseUrl + response.data.name,
 	}));
 
 	return suggestions;
