@@ -5,6 +5,7 @@ import { MainHeader } from '@html/MainHeader.tsx';
 import { jsx } from 'jsx';
 import { User } from '../../../data/user.ts';
 import { NickSection } from '@html/pages/home/NickSection.tsx';
+import { LoadingSpinner } from '@html/components/loading-spinner.tsx';
 
 interface HomeProps {
 	user: User;
@@ -33,7 +34,8 @@ export function Home(props: HomeProps)
 						hx-post='/join'
 						hx-target='#root'
 						hx-swap='outerHTML'
-						hx-trigger='submit'>
+						hx-trigger='submit'
+						hx-indicator='#join-indicator'>
 
 						<input class='g-big'
 							type='text'
@@ -43,6 +45,8 @@ export function Home(props: HomeProps)
 							required />
 
 						<button class='g-big' type='submit'>⎆</button>
+						
+						<LoadingSpinner id='join-indicator' style='border-radius: var(--radius-common)' />
 					</form>
 					
 					{<NickSection nick={props.user.nick} />}

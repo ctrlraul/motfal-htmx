@@ -5,6 +5,7 @@ import { Style } from '@html/components/style.tsx';
 import { jsx } from 'jsx';
 import { Room } from '../../../data/room.ts';
 import { ArticlesHelper } from '../../../articles/articles-helper.ts';
+import { LoadingSpinner } from '@html/components/loading-spinner.tsx';
 
 
 interface MakeRoomProps {
@@ -41,9 +42,12 @@ export function MakeRoom(props: MakeRoomProps)
 					hx-target='#root'
 					hx-swap='outerHTML'
 					hx-include='input'
-					hx-push-url='true'>
+					hx-push-url='true'
+					hx-indicator='#make-indicator'>
 					Make
 				</button>
+
+				<LoadingSpinner id='make-indicator' />
 			</main>
 
 			<footer>
