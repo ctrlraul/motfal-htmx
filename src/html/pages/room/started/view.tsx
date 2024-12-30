@@ -23,12 +23,12 @@ export function RoomStarted(props: RoomStartedProps)
 	return (
 		<>
 			<section style='flex: 1; display: flex; flex-direction: column;'>
-				<h3 style={style}>
+				<h2 style={style}>
 					<ArticleTitle
 						article={props.article}
 						preserveStyle={props.room.rules.preserveTitleStyle}
 					/>
-				</h3>
+				</h2>
 			</section>
 			
 			<div class='g-box'>
