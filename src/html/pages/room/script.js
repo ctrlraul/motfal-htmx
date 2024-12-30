@@ -13,7 +13,7 @@
 		inviteLinkOutput.value = inviteLink;
 
 		const copyInviteButton = document.getElementById('copy-invite-button');
-		copyInviteButton.addEventListener('click', () => copyToClipboard(inviteLink));
+		copyInviteButton.addEventListener('click', copyInviteToClipboard);
 	}
 
 	updateTime();
@@ -50,13 +50,10 @@
 		return `${differenceInDays} days ago`;
 	}
 
-	async function copyToClipboard(text) {
-		try {
-			await navigator.clipboard.writeText(text);
-			console.log('Copied to clipboard');
-		} catch (error) {
-			console.error('Failed to copy to clipboard:', error);
-		}
+	function copyInviteToClipboard(_event) {
+		navigator.clipboard.writeText(inviteLink)
+			.then(() => console.log('Copied to clipboard'))
+			.catch(error => console.error('Failed to copy to clipboard:', error));
 	}
 
 })();
