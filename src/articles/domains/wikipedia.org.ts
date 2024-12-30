@@ -27,8 +27,6 @@ async function getArticle(id: string): Promise<Article>
 {
 	const title = getTitleFromId(id);
 
-	console.log(id, '->', title);
-
 	const response = await axios.get('/w/api.php', {
 		params: {
 			action: 'query',
