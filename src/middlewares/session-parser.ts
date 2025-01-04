@@ -1,10 +1,9 @@
-import { Context, Next } from '@oak/oak';
-import { TokenHelper } from '../helpers/token-helper.ts';
-import { env } from '@raul/env';
+import { TokenHelper } from '../helpers/token-helper';
 import { adjectives, animals, uniqueNamesGenerator } from 'unique-names-generator';
-import { Buffer } from 'node:buffer';
-import { randomUUID } from 'node:crypto';
-import { User } from '../data/user.ts';
+import { randomUUID } from 'crypto';
+import { User } from '../data/user';
+import { env } from '../helpers/env';
+import { Request, Response, NextFunction } from 'express';
 
 
 export class Session {
@@ -21,14 +20,14 @@ export class Session {
 		};
 	}
 
-	public save(ctx: Context<CtxState>, data?: Partial<User>) {
+	public save(res: Response, data?: Partial<User>) {
 
 		if (data)
 			Object.assign(this.user, data);
 	
 		const token = TokenHelper.createSecretToken(this, secret);
 
-		ctx.cookies.set(cookieName, token);
+		res.cookie(cookieName, token);
 	}
 }
 
@@ -37,17 +36,15 @@ const secret: Buffer = Buffer.from(env('SESSIONS_SECRET'));
 const cookieName = 'session';
 
 
-async function middleware(ctx: Context<CtxState>, next: Next) {
-
-	const token = await ctx.cookies.get(cookieName);
-
-	if (token) {
-		ctx.state.session = TokenHelper.readSecretToken(token, secret);
-		ctx.state.session.save = Session.prototype.save; // Ew :/
+async function middleware(req: Request, res: Response, next: NextFunction)
+{
+	if (cookieName in req.cookies) {
+		req.session = TokenHelper.readSecretToken(req.cookies[cookieName], secret);
+		req.session.save = Session.prototype.save; // Ew :/
 	} else {
 		const session = new Session(TokenHelper.generateId());
-		session.save(ctx);
-		ctx.state.session = session;
+		session.save(res);
+		req.session = session;
 	}
 
 	await next();

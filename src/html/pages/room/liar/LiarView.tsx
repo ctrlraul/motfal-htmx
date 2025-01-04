@@ -1,11 +1,11 @@
-import { jsx, Fragment } from 'jsx';
-import { Room } from '../../../../data/room.ts';
-import { LoadingSpinner } from '@html/components/LoadingSpinner.tsx';
-import { ArticleSubmitted } from '@html/pages/room/liar/ArticleSubmitted.tsx';
-import { Style } from '@html/components/Style.tsx';
-import path from 'node:path';
-import { ArticlesHelper } from '../../../../articles/articles-helper.ts';
-import { User } from '../../../../data/user.ts';
+import { jsx, Fragment } from '@jsx';
+import { Room } from '../../../../data/room';
+import { LoadingSpinner } from '@html/components/LoadingSpinner';
+import { ArticleSubmitted } from '@html/pages/room/liar/ArticleSubmitted';
+import { Style } from '@html/components/Style';
+import { ArticlesHelper } from '../../../../articles/articles-helper';
+import { User } from '../../../../data/user';
+import css from './liar.css';
 
 
 interface LiarViewProps {
@@ -65,7 +65,7 @@ export function LiarView(props: LiarViewProps)
 
 			<LoadingSpinner id='submit-indicator' />
 			
-			<Style src={path.join(import.meta.dirname!, 'liar.css')} />
+			<Style css={css} />
 		</>
 	);
 }

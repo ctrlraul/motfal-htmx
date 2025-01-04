@@ -1,11 +1,9 @@
-import { Root } from '@html/Root.tsx';
-import { MainHeader } from '@html/MainHeader.tsx';
-import { Style } from '@html/components/Style.tsx';
-import path from 'node:path';
-import { jsx } from 'jsx';
-import { User } from '../../../data/user.ts';
-
-const styleSrc = path.join(import.meta.dirname!, 'style.css');
+import { Root } from '@html/Root';
+import { MainHeader } from '@html/MainHeader';
+import { Style } from '@html/components/Style';
+import { jsx } from '@jsx';
+import { User } from '../../../data/user';
+import css from './style.css';
 
 export function Rules({ user }: { user: User })
 {
@@ -30,7 +28,7 @@ export function Rules({ user }: { user: User })
 				Ok
 			</footer>
 
-			<Style src={styleSrc} />
+			<Style css={css} />
 		</Root>
 	);
 }

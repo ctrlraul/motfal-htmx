@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"jsx": "react",
+		"jsxFactory": "jsx",
+		"jsxFragmentFactory": "Fragment",
+		"strict": true,
+		"skipLibCheck": true,
+		"outDir": "dist",
+		"baseUrl": ".",
+		"paths": {
+			"*": ["node_modules/*"],
+			"@jsx": ["src/jsx"],
+			"@html/*": ["src/html/*"]
+		},
+		"typeRoots": ["./node_modules/@types", "./src/types"],
+		"esModuleInterop": true
+	},
+	"include": ["src/**/*"]
+}

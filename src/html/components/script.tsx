@@ -1,5 +1,5 @@
-import { importText } from '../../helpers/import-text.ts';
-import { jsx } from 'jsx';
+import { jsx } from '@jsx';
+import { importText } from '../../helpers/import-text';
 
 /** Inline JS */
 export function Script(props: { src: string }) {

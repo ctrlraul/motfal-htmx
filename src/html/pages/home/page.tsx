@@ -1,17 +1,15 @@
-import path from 'node:path';
-import { Style } from '@html/components/Style.tsx';
-import { Root } from '@html/Root.tsx';
-import { MainHeader } from '@html/MainHeader.tsx';
-import { jsx } from 'jsx';
-import { NickSection } from '@html/pages/home/NickSection.tsx';
-import { LoadingSpinner } from '@html/components/LoadingSpinner.tsx';
-import { User } from '../../../data/user.ts';
+import { Style } from '@html/components/Style';
+import { Root } from '@html/Root';
+import { MainHeader } from '@html/MainHeader';
+import { jsx } from '@jsx';
+import { NickSection } from '@html/pages/home/NickSection';
+import { LoadingSpinner } from '@html/components/LoadingSpinner';
+import { User } from '../../../data/user';
+import css from './style.css';
 
 interface HomeProps {
 	user: User;
 }
-
-const styleSrc = path.join(import.meta.dirname!, 'style.css');
 
 export function Home(props: HomeProps)
 {
@@ -62,7 +60,7 @@ export function Home(props: HomeProps)
 				How to play
 			</footer>
 
-			<Style src={styleSrc} />
+			<Style css={css} />
 		</Root>
 	);
 }

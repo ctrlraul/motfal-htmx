@@ -1,22 +1,24 @@
-import { RoomHeader } from '@html/pages/room/RoomHeader.tsx';
-import { Root } from '@html/Root.tsx';
-import { LiarView } from '@html/pages/room/liar/LiarView.tsx';
-import { GuesserView } from '@html/pages/room/guesser/GuesserView.tsx';
-import { Script } from '@html/components/Script.tsx';
-import path from 'node:path';
-import { Room as TRoom } from '../../../data/room.ts';
-import { jsx } from 'jsx';
-import { Json } from '@html/components/Json.tsx';
-import { RoomStarted } from '@html/pages/room/started/StartedView.tsx';
-import { RulesPopup } from '@html/pages/room/RulesPopup.tsx';
-import { User } from '../../../data/user.ts';
+import { RoomHeader } from '@html/pages/room/RoomHeader';
+import { Root } from '@html/Root';
+import { LiarView } from '@html/pages/room/liar/LiarView';
+import { GuesserView } from '@html/pages/room/guesser/GuesserView';
+import { Script } from '@html/components/Script';
+import { Room as TRoom } from '../../../data/room';
+import { jsx } from '@jsx';
+import { Json } from '@html/components/Json';
+import { RoomStarted } from '@html/pages/room/started/StartedView';
+import { RulesPopup } from '@html/pages/room/RulesPopup';
+import { User } from '../../../data/user';
+import { join } from 'path';
+import { Style } from '@html/components/Style';
+import css from './style.css';
+
 
 interface RoomProps {
 	room: TRoom;
 	user: User;
 }
 
-const scriptSrc = path.join(import.meta.dirname!, 'script.js');
 
 export function Room(props: RoomProps)
 {
@@ -55,7 +57,8 @@ export function Room(props: RoomProps)
 
 			<RulesPopup {...props} />
 
-			<Script src={scriptSrc} />
+			<Script src={join(process.cwd(), 'static/scripts/room/script.js')} />
+			<Style css={css} />
 
 			<div hidden sse-swap='Kicked' hx-target='#root' hx-swap='outerHTML'></div>
 			<div hidden sse-swap='Started' hx-target='#room-view'></div>

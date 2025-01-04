@@ -1,10 +1,11 @@
-import { fromHtml, JsxElement } from 'jsx';
-import { omit } from '../../helpers/omit.ts';
+import { jsx, Fragment, fromHtml } from '@jsx';
+import { omit } from '../../helpers/omit';
+
 
 
 interface FromHtmlProps {
 	html: string;
-	children?: JsxElement['children'];
+	children?: JSX.Element['children'];
 	[K: string]: unknown;
 }
 
@@ -15,12 +16,12 @@ export function FromHtml(props: FromHtmlProps)
 	const first = elements[0];
 
 	if (elements.length === 0 || typeof first === 'string')
-		return elements;
+		return <>{elements}</>;
 
 	if (props.children)
 		first.children.push(...props.children);
 
 	Object.assign(first.attributes, omit(props, ['html']));
 
-	return elements;
+	return <>{elements}</>;
 }

@@ -1,18 +1,18 @@
-import { UsersCount } from '@html/pages/room/guesser/UsersCount.tsx';
-import { jsx, Fragment, render } from 'jsx';
-import { Article } from '../data/article.ts';
-import { Room } from '../data/room.ts';
-import { User } from '../data/user.ts';
-import { Logger } from '../helpers/logger.ts';
-import { objectLength } from '../helpers/object-length.ts';
-import randomString from '../helpers/random-string.ts';
-import { getSwapString, UsersListItem } from '@html/pages/room/guesser/UsersListItem.tsx';
-import { EventSender } from './event-sender.ts';
-import { ArticlesCounter } from '@html/pages/room/guesser/ArticlesCounter.tsx';
-import { Home } from '@html/pages/home/Page.tsx';
-import { RoomStarted } from '@html/pages/room/started/StartedView.tsx';
-import { StartButton } from '@html/pages/room/guesser/StartButton.tsx';
-import { InvitePopup } from '@html/pages/room/started/InvitePopup.tsx';
+import { UsersCount } from '@html/pages/room/guesser/UsersCount';
+import { jsx, Fragment, render } from '@jsx';
+import { Article } from '../data/article';
+import { Room } from '../data/room';
+import { User } from '../data/user';
+import { Logger } from '../helpers/logger';
+import { objectLength } from '../helpers/object-length';
+import randomString from '../helpers/random-string';
+import { getSwapString, UsersListItem } from '@html/pages/room/guesser/UsersListItem';
+import { EventSender } from './event-sender';
+import { ArticlesCounter } from '@html/pages/room/guesser/ArticlesCounter';
+import { Home } from '@html/pages/home/Page';
+import { RoomStarted } from '@html/pages/room/started/StartedView';
+import { StartButton } from '@html/pages/room/guesser/StartButton';
+import { InvitePopup } from '@html/pages/room/started/InvitePopup';
 
 
 const logger = new Logger('RoomsManager');

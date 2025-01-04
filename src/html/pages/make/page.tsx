@@ -1,12 +1,12 @@
-import { Root } from '@html/Root.tsx';
-import { MainHeader } from '@html/MainHeader.tsx';
-import path from 'node:path';
-import { Style } from '@html/components/Style.tsx';
-import { jsx } from 'jsx';
-import { Room } from '../../../data/room.ts';
-import { ArticlesHelper } from '../../../articles/articles-helper.ts';
-import { LoadingSpinner } from '@html/components/LoadingSpinner.tsx';
-import { User } from '../../../data/user.ts';
+import { Root } from '@html/Root';
+import { MainHeader } from '@html/MainHeader';
+import { Style } from '@html/components/Style';
+import { jsx } from '@jsx';
+import { Room } from '../../../data/room';
+import { ArticlesHelper } from '../../../articles/articles-helper';
+import { LoadingSpinner } from '@html/components/LoadingSpinner';
+import { User } from '../../../data/user';
+import css from './style.css';
 
 
 interface MakeRoomProps {
@@ -20,8 +20,6 @@ const limitUsers = false;
 
 export function MakeRoom(props: MakeRoomProps)
 {
-	const styleSrc = path.join(import.meta.dirname!, 'style.css');
-
 	return (
 		<Root title='MoþFAL - Make Room' user={props.user}>
 			<MainHeader>Make Room</MainHeader>
@@ -61,7 +59,7 @@ export function MakeRoom(props: MakeRoomProps)
 				</div>
 			</footer>
 
-			<Style src={styleSrc} />
+			<Style css={css} />
 		</Root>
 	);
 }

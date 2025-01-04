@@ -1,7 +1,7 @@
-import { Article } from '../../../../data/article.ts';
-import { Room } from '../../../../data/room.ts';
-import { ArticleTitle } from '@html/ArticleTitle.tsx';
-import { jsx, Fragment } from 'jsx';
+import { Article } from '../../../../data/article';
+import { Room } from '../../../../data/room';
+import { ArticleTitle } from '@html/ArticleTitle';
+import { jsx, Fragment } from '@jsx';
 
 interface RoomStartedProps {
 	article: Article;

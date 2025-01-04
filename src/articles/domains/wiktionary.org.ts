@@ -1,6 +1,6 @@
-import { Article } from '../../data/article.ts';
-import { ItemSuggestion, Domain, Rules } from '../articles-helper.ts';
-import Axios from 'axiod';
+import { Article } from '../../data/article';
+import { ItemSuggestion, Domain, Rules } from '../articles-helper';
+import Axios from 'axios';
 
 
 interface ArticlesResponse {

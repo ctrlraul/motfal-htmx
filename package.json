@@ -1,5 +1,38 @@
 {
-  "dependencies": {
-    "htmlparser2": "^9.1.0"
-  }
+	"name": "motfal",
+	"version": "1.0.0",
+	"main": "dist/main.js",
+	"type": "module",
+	"dependencies": {
+		"axios": "^1.7.9",
+		"change-case": "^5.4.4",
+		"cookie-parser": "^1.4.7",
+		"dotenv": "^16.4.7",
+		"express": "^4.21.2",
+		"express-async-errors": "^3.1.1",
+		"htmlparser2": "^9.1.0",
+		"kysely": "^0.27.5",
+		"pg": "^8.13.1",
+		"tweetnacl": "^1.0.3",
+		"typescript": "^5.7.2",
+		"unique-names-generator": "^4.7.1"
+	},
+	"devDependencies": {
+		"@types/cookie-parser": "^1.4.8",
+		"@types/express": "^5.0.0",
+		"@types/node": "^22.10.2",
+		"esbuild": "^0.24.2",
+		"esbuild-node-externals": "^1.16.0",
+		"ts-node": "^10.9.2"
+	},
+	"scripts": {
+		"build": "node scripts/build.js",
+		"start": "node --enable-source-maps dist/main.js",
+		"dev": "node scripts/dev.js",
+		"check": "tsc --noemit"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"description": ""
 }

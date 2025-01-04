@@ -1,6 +1,6 @@
-import { jsx } from 'jsx';
-import { Room } from '../../../data/room.ts';
-import * as Icons from '@html/icons.tsx';
+import { jsx } from '@jsx';
+import { Room } from '../../../data/room';
+import * as Icons from '@html/icons';
 
 export interface RoomHeaderProps {
 	room: Room;

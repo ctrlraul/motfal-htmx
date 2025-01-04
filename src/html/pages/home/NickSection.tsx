@@ -1,5 +1,5 @@
-import { jsx } from 'jsx';
-import { Pencil } from '@html/icons.tsx';
+import { jsx } from '@jsx';
+import { Pencil } from '@html/icons';
 
 export function NickSection(props: { nick: string })
 {

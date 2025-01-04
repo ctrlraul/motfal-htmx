@@ -1,6 +1,6 @@
-import { jsx } from 'jsx';
-import { CookiesPopup } from '@html/CookiesPopup.tsx';
-import { User } from '../data/user.ts';
+import { jsx } from '@jsx';
+import { CookiesPopup } from '@html/CookiesPopup';
+import { User } from '../data/user';
 
 export interface RootProps {
 	title: string;

@@ -1,67 +1,65 @@
-import { Router, Status } from '@oak/oak';
-import { Home } from '@html/pages/home/Page.tsx';
-import { Rules } from '@html/pages/rules/page.tsx';
-import { MakeRoom } from '@html/pages/make/Page.tsx';
-import { RoomsManager } from '../managers/rooms-manager.tsx';
-import { Session, SessionParser } from '../middlewares/session-parser.ts';
-import { SuggestionsListItem } from '@html/pages/room/liar/SuggestionsListItem.tsx';
-import { ArticleSubmitted } from '@html/pages/room/liar/ArticleSubmitted.tsx';
-import { Room } from '@html/pages/room/Page.tsx';
-import { ArticlesHelper } from '../articles/articles-helper.ts';
-import { jsx, render } from 'jsx';
-import { RoomStarted } from '@html/pages/room/started/StartedView.tsx';
-import { NickSection } from '@html/pages/home/NickSection.tsx';
+import { Router, urlencoded } from 'express';
+import { Home } from '@html/pages/home/Page';
+import { Rules } from '@html/pages/rules/page';
+import { MakeRoom } from '@html/pages/make/Page';
+import { RoomsManager } from '../managers/rooms-manager';
+import { SessionParser } from '../middlewares/session-parser';
+import { SuggestionsListItem } from '@html/pages/room/liar/SuggestionsListItem';
+import { ArticleSubmitted } from '@html/pages/room/liar/ArticleSubmitted';
+import { Room } from '@html/pages/room/Page';
+import { ArticlesHelper } from '../articles/articles-helper';
+import { jsx, render } from '@jsx';
+import { RoomStarted } from '@html/pages/room/started/StartedView';
+import { NickSection } from '@html/pages/home/NickSection';
 
 
 const NickLengthMax = 32;
 const ArticlesPerRequest = 16;
 
-const router = new Router<{
-	session: Session,
-	log: (...args: unknown[]) => void
-}>();
+const router = Router();
 
 
+router.use(urlencoded({ extended: true }));
 router.use(SessionParser.middleware);
 
 
-router.get('/', ctx => {
+router.get('/', (req, res) => {
 
-	const { user } = ctx.state.session;
+	const { user } = req.session;
 	const room = RoomsManager.getUserRoom(user.id);
 
 	if (room) {
-		ctx.response.redirect('/room');
+		res.redirect('/room');
 		return;
 	}
 
-	ctx.response.type = 'text/html';
-	ctx.response.body = render(
+	res.type('text/html');
+	res.send(render(
 		<Home user={user} />
-	);
+	));
 });
 
-router.post('/cookies/accept', ctx => {
-	ctx.state.session.save(ctx, { acceptedCookies: true });
-	ctx.response.type = 'text/html';
-	ctx.response.body = '';
+router.post('/cookies/accept', (req, res) => {
+	req.session.save(res, { acceptedCookies: true });
+	res.type('text/html');
+	res.send();
 });
 
-router.post('/cookies/reject', ctx => {
+router.post('/cookies/reject', (req, res) => {
 
-	const { user } = ctx.state.session;
+	const { user } = req.session;
 	const room = RoomsManager.getUserRoom(user.id);
 
 	if (room)
 		RoomsManager.removeUserFromRoom(room, user.id);
 
-	ctx.cookies.set(SessionParser.cookieName, null);
-	ctx.response.headers.append('Hx-Redirect', 'https://www.google.com/');
+	res.clearCookie(SessionParser.cookieName);
+	res.header('Hx-Redirect', 'https://www.google.com/');
 });
 
-router.get('/nick-change', ctx => {
-	ctx.response.type = 'text/html';
-	ctx.response.body = render(
+router.get('/nick-change', (req, res) => {
+	res.type('text/html');
+	res.send(render(
 		<form id='nick'
 			hx-post='/nick-change'
 			hx-swap='outerHTML'
@@ -70,7 +68,7 @@ router.get('/nick-change', ctx => {
 			<input type='text'
 				name='nick'
 				placeholder='New nick'
-				value={ctx.state.session.user.nick}
+				value={req.session.user.nick}
 				max={NickLengthMax}/>
 
 			<button class='cancel' type='submit'>
@@ -81,59 +79,57 @@ router.get('/nick-change', ctx => {
 				Ok
 			</button>
 		</form>
-	);
+	));
 });
 
-router.post('/nick-change', async ctx => {
+router.post('/nick-change', async (req, res) => {
 	
-	const { user } = ctx.state.session;
-	const form = await ctx.request.body.form();
-	const nick = (form.get('nick') || '').slice(0, NickLengthMax);
+	const { user } = req.session;
+	const nick = String(req.body['nick'] || '').slice(0, NickLengthMax);
 
 	if (nick != '' && nick != user.nick)
-		ctx.state.session.save(ctx, { nick });
+		req.session.save(res, { nick });
 
-	ctx.response.type = 'text/html';
-	ctx.response.body = render(<NickSection nick={user.nick} />);
+	res.type('text/html');
+	res.send(render(<NickSection nick={user.nick} />));
 });
 
-router.get('/rules', ctx => {
-	ctx.response.type = 'text/html';
-	ctx.response.body = render(<Rules user={ctx.state.session.user}/>);
+router.get('/rules', (req, res) => {
+	res.type('text/html');
+	res.send(render(<Rules user={req.session.user}/>));
 });
 
-router.get('/make', ctx => {
-	const { user } = ctx.state.session;
+router.get('/make', (req, res) => {
+	const { user } = req.session;
 	const currentRoom = RoomsManager.getUserRoom(user.id);
-	ctx.response.type = 'text/html';
-	ctx.response.body = render(<MakeRoom currentRoom={currentRoom} user={user} />);
+	res.type('text/html');
+	res.send(render(<MakeRoom currentRoom={currentRoom} user={user} />));
 });
 
-router.post('/make', async ctx => {
+router.post('/make', async (req, res) => {
 
-	const { user } = ctx.state.session;
-	const form = await ctx.request.body.form();
+	const { user } = req.session;
 
-	const domainName = form.get('domain');
-	const limitUsers = form.get('limit-users') === 'on';
-	const usersLimit = parseInt(String(form.get('users-limit'))) || 0;
-	const invite     = form.get('invite') === 'on';
+	const domainName = req.body['domain'];
+	const limitUsers = req.body['limit-users'] === 'on';
+	const usersLimit = parseInt(String(req.body['users-limit'])) || 0;
+	const invite     = req.body['invite'] === 'on';
 
 	if (!ArticlesHelper.isDomainRegistered(domainName))
 	{
-		ctx.response.status = Status.BadRequest;
-		ctx.response.body = 'Invalid domain';
+		res.status(404);
+		res.send('Invalid domain');
 		return;
 	}
 
 	if (limitUsers && usersLimit < 3)
 	{
-		ctx.response.status = Status.BadRequest;
-		ctx.response.body = 'Invalid users limit';
+		res.status(404);
+		res.send('Invalid users limit');
 		return;
 	}
 
-	const rules = ArticlesHelper.createRules(domainName!, form);
+	const rules = ArticlesHelper.createRules(domainName!, req.body);
 	const oldRoom = RoomsManager.getUserRoom(user.id);
 	const newRoom = RoomsManager.createRoom(user, domainName!, rules, limitUsers ? usersLimit : 0);
 
@@ -145,51 +141,50 @@ router.post('/make', async ctx => {
 			RoomsManager.inviteToNewRoom(oldRoom, user, newRoom);
 	}
 	
-	ctx.response.redirect('/room');
+	res.redirect('/room');
 });
 
-router.get('/room', ctx => {
+router.get('/room', (req, res) => {
 
-	const { user } = ctx.state.session;
+	const { user } = req.session;
 	const room = RoomsManager.getUserRoom(user.id);
 
 	if (room == null) {
-		ctx.state.log(user.nick, '-> Not in a room');
-		ctx.response.redirect('/');
+		console.log(`[${req.path}]`, user.nick, '-> Not in a room');
+		res.redirect('/');
 		return;
 	}
 
-	ctx.response.type = 'text/html';
-	ctx.response.body = render(
+	res.type('text/html');
+	res.send(render(
 		<Room room={room} user={user} />
-	);
+	));
 });
 
-router.post('/join', async ctx => {
+router.post('/join', async (req, res) => {
 	
-	const form = await ctx.request.body.form();
-	const code = form.get('code');
+	const code = req.body['code'];
 	const id = String(code || '').split('/').pop();
 	
 	if (!id) {
-		ctx.state.log(ctx.state.session.user.nick, '-> Invalid code:', code);
-		ctx.response.redirect('/');
+		console.log(`[${req.path}]`, req.session.user.nick, '-> Invalid code:', code);
+		res.redirect('/');
 		return;
 	}
 
-	ctx.response.redirect('/join/' + id);
+	res.redirect('/join/' + id);
 });
 
-router.get('/join/:id', ctx => {
+router.get('/join/:id', (req, res) => {
 	
-	const { user } = ctx.state.session;
+	const { user } = req.session;
 	const currentRoom = RoomsManager.getUserRoom(user.id);
-	const roomId = ctx.params.id;
+	const roomId = req.params.id;
 
 	if (currentRoom) {
 
 		if (currentRoom.id == roomId) {
-			ctx.response.redirect('/room');
+			res.redirect('/room');
 			return;
 		}
 
@@ -199,30 +194,30 @@ router.get('/join/:id', ctx => {
 	const room = RoomsManager.getRoom(roomId);
 
 	if (!room) { // Room not found page?
-		ctx.state.log(user.nick, '-> No room with id:', roomId);
-		ctx.response.redirect('/');
+		console.log(`[${req.path}]`, user.nick, '-> No room with id:', roomId);
+		res.redirect('/');
 		return;
 	}
 
 	if (room.kicked.includes(user.id)) {
-		ctx.response.redirect('/');
+		res.redirect('/');
 		return;
 	}
 
 	RoomsManager.addUserToRoom(room, user);
 
-	ctx.response.redirect('/room');
+	res.redirect('/room');
 
 });
 
-router.get('/suggestions', async ctx => {
+router.get('/suggestions', async (req, res) => {
 
-	const { user } = ctx.state.session;
+	const { user } = req.session;
 	const room = RoomsManager.getUserRoom(user.id);
 	
 	if (!room) {
-		ctx.state.log(user.nick, '-> Not in a room');
-		ctx.response.redirect('/');
+		console.log(`[${req.path}]`, user.nick, '-> Not in a room');
+		res.redirect('/');
 		return;
 	}
 
@@ -232,63 +227,62 @@ router.get('/suggestions', async ctx => {
 		room.rules
 	);
 
-	ctx.response.type = 'text/html';
-	ctx.response.body = render(
+	res.type('text/html');
+	res.send(render(
 		articleInfos.map(info =>
 			<SuggestionsListItem {...info} />
 		)
-	);
+	));
 });
 
-router.post('/kick', ctx =>
+router.post('/kick', (req, res) =>
 {
-	const { user } = ctx.state.session;
+	const { user } = req.session;
 	const room = RoomsManager.getUserRoom(user.id);
 
 	if (!room) {
-		ctx.state.log(user.nick, '-> Not in a room');
-		ctx.response.redirect('/');
+		console.log(`[${req.path}]`, user.nick, '-> Not in a room');
+		res.redirect('/');
 		return;
 	}
 
 	if (user.id !== room.guesserId)
 	{
-		ctx.state.log(user.nick, '-> Only the guesser can kick');
-		ctx.response.redirect('/');
+		console.log(`[${req.path}]`, user.nick, '-> Only the guesser can kick');
+		res.redirect('/');
 		return;
 	}
 
-	const kickId = ctx.request.url.searchParams.get('id') || '';
+	const kickId = String(req.query['id']) || '';
 
 	if (!RoomsManager.isUserInRoom(room, kickId))
 	{
-		ctx.state.log(user.nick, '-> User not found');
-		ctx.response.redirect('/');
+		console.log(`[${req.path}]`, user.nick, '-> User not found');
+		res.redirect('/');
 		return;
 	}
 
 	RoomsManager.kickUserFromRoom(room, kickId);
 
-	ctx.response.status = Status.OK;
+	res.status(200);
 
 });
 
-router.post('/submit', async ctx => {
+router.post('/submit', async (req, res) => {
 
-	const { user } = ctx.state.session;
+	const { user } = req.session;
 	const room = RoomsManager.getUserRoom(user.id);
-	const form = await ctx.request.body.form();
 
 	if (!room) {
-		ctx.state.log(user.nick, '-> Not in a room');
-		ctx.response.redirect('/');
+		console.log(`[${req.path}]`, user.nick, '-> Not in a room');
+		res.redirect('/');
 		return;
 	}
 	
 	if (room.articles.find(article => article.userId == user.id))
 		throw new Error('Already submitted an article');
 
-	const link = form.get('link');
+	const link = req.body['link'];
 
 	if (!link)
 		throw new Error('Link can\'t be empty');
@@ -297,37 +291,37 @@ router.post('/submit', async ctx => {
 
 	RoomsManager.addArticleToUserInRoom(room, user.id, article);
 
-	ctx.response.type = 'text/html';
-	ctx.response.body = render(
+	res.type('text/html');
+	res.send(render(
 		<ArticleSubmitted room={room} article={article} />
-	);
+	));
 });
 
-router.post('/leave', ctx => {
+router.post('/leave', (req, res) => {
 	
-	const { user } = ctx.state.session;
+	const { user } = req.session;
 	const room = RoomsManager.getUserRoom(user.id);
 
 	if (!room) {
-		ctx.state.log(user.nick, '-> Not in a room');
-		ctx.response.redirect('/');
+		console.log(`[${req.path}]`, user.nick, '-> Not in a room');
+		res.redirect('/');
 		return;
 	}
 
 	RoomsManager.removeUserFromRoom(room, user.id);
 
-	ctx.response.redirect('/');
+	res.redirect('/');
 
 });
 
-router.post('/start', ctx => {
+router.post('/start', (req, res) => {
 
-	const { user } = ctx.state.session;
+	const { user } = req.session;
 	const room = RoomsManager.getUserRoom(user.id);
 	
 	if (!room) {
-		ctx.state.log(user.nick, '-> Not in a room');
-		ctx.response.redirect('/');
+		console.log(`[${req.path}]`, user.nick, '-> Not in a room');
+		res.redirect('/');
 		return;
 	}
 
@@ -335,8 +329,10 @@ router.post('/start', ctx => {
 	
 	const article = room.articles[room.currentArticle];
 
-	ctx.response.type = 'text/html';
-	ctx.response.body = render(<RoomStarted article={article} room={room} />);
+	res.type('text/html');
+	res.send(render(
+		<RoomStarted article={article} room={room} />
+	));
 });
 
 

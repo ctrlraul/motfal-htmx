@@ -1,4 +1,4 @@
-import { jsx } from 'jsx';
+import { jsx } from '@jsx';
 
 export interface BasicHeaderProps {
 	children?: unknown;

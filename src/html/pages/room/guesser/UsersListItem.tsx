@@ -1,8 +1,8 @@
-import { Room } from '../../../../data/room.ts';
-import { User } from '../../../../data/user.ts';
-import { EventSender } from '../../../../managers/event-sender.ts';
-import { jsx } from 'jsx';
-import * as Icons from '@html/icons.tsx';
+import { Room } from '../../../../data/room';
+import { User } from '../../../../data/user';
+import { EventSender } from '../../../../managers/event-sender';
+import { jsx } from '@jsx';
+import * as Icons from '@html/icons';
 
 
 interface UsersListItem {

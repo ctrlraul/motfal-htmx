@@ -1,7 +1,7 @@
-import { Article } from '../data/article.ts';
-import { PokeApi } from './domains/pokeapi.co.ts';
-import { WikipediaOrg } from './domains/wikipedia.org.ts';
-import { WiktionaryOrg } from './domains/wiktionary.org.ts';
+import { Article } from '../data/article';
+import { PokeApi } from './domains/pokeapi.co';
+import { WikipediaOrg } from './domains/wikipedia.org';
+import { WiktionaryOrg } from './domains/wiktionary.org';
 
 
 export interface Rule {
@@ -52,14 +52,14 @@ function getRandomArticles(domainName: string, count: number, rules: Rules): Pro
 	return domains.get(domainName)!.getRandomArticles(count, rules);
 }
 
-function createRules(domainName: string, params: URLSearchParams): Rules
+function createRules(domainName: string, params: { [key: string]: unknown }): Rules
 {
 	const ruleSet = domains.get(domainName)!.ruleSet;
 	const rules: Rules = {};
 
 	for (const rule of ruleSet)
 	{
-		const param = params.get(domainName + '-' + rule.id);
+		const param = params[domainName + '-' + rule.id];
 		rules[rule.id] = param === 'on';
 	}
 

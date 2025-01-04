@@ -1,6 +1,6 @@
-import { jsx } from 'jsx';
-import { OpenExternal } from '@html/icons.tsx';
-import { ItemSuggestion } from '../../../../articles/articles-helper.ts';
+import { jsx } from '@jsx';
+import { OpenExternal } from '@html/icons';
+import { ItemSuggestion } from '../../../../articles/articles-helper';
 
 export function SuggestionsListItem(props: ItemSuggestion)
 {

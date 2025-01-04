@@ -1,43 +1,9 @@
-import { jsx } from 'jsx';
-import { Room } from '../../../../data/room.ts';
-import { User } from '../../../../data/user.ts';
+import { jsx } from '@jsx';
+import { Room } from '../../../../data/room';
+import { User } from '../../../../data/user';
+import { Style } from '@html/components/Style';
+import css from './invite.css';
 
-const css = /*css*/`
-@keyframes slideUp {
-	from {
-		transform: translateY(100%);
-		opacity: 0;
-	}
-	to {
-		transform: translateY(0);
-		opacity: 1;
-	}
-}
-
-@keyframes slideDown {
-	from {
-		transform: translateY(0);
-		opacity: 1;
-	}
-	to {
-		transform: translateY(100%);
-		opacity: 0;
-	}
-}
-
-#invitePopup {
-	position: absolute;
-	text-align: center;
-	animation: slideUp 200ms ease-out;
-	opacity: 1;
-	margin-bottom: 0;
-	bottom: 5.25rem;
-}
-
-#invitePopup.hide {
-	animation: slideDown 200ms ease-out;
-	opacity: 0;
-}`;
 
 export function InvitePopup(props: { user: User, room: Room })
 {
@@ -83,7 +49,7 @@ export function InvitePopup(props: { user: User, room: Room })
 				</button>
 			</div>
 
-			<style>{css}</style>
+			<Style css={css} />
 		</div>
 		
 	)

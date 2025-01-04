@@ -1,6 +1,6 @@
-import { Room } from '../../../../data/room.ts';
-import { objectLength } from '../../../../helpers/object-length.ts';
-import { jsx } from 'jsx';
+import { Room } from '../../../../data/room';
+import { objectLength } from '../../../../helpers/object-length';
+import { jsx } from '@jsx';
 
 
 const id = 'users-count';

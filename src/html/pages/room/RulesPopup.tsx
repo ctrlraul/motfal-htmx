@@ -1,10 +1,7 @@
-import path from 'node:path';
-import { Room } from '../../../data/room.ts';
-import { Style } from '@html/components/Style.tsx';
-import { jsx } from 'jsx';
-import { ArticlesHelper } from '../../../articles/articles-helper.ts';
+import { Room } from '../../../data/room';
+import { jsx } from '@jsx';
+import { ArticlesHelper } from '../../../articles/articles-helper';
 
-const styleSrc = path.join(import.meta.dirname!, 'style.css');
 
 export function RulesPopup(props: { room: Room })
 {
@@ -21,8 +18,6 @@ export function RulesPopup(props: { room: Room })
 				)}
 
 			</div>
-
-			<Style src={styleSrc} />
 		</div>
 	);
 }

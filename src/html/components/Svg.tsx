@@ -1,7 +1,7 @@
-import { importText } from '../../helpers/import-text.ts';
-import { omit } from '../../helpers/omit.ts';
-import { FromHtml } from '@html/components/FromHtml.tsx';
-import { jsx } from 'jsx';
+import { importText } from '../../helpers/import-text';
+import { omit } from '../../helpers/omit';
+import { FromHtml } from '@html/components/FromHtml';
+import { jsx } from '@jsx';
 
 
 interface SvgProps {
@@ -17,14 +17,3 @@ export function Svg(props: SvgProps)
 	const attributes = omit(props, ['src']);
 	return <FromHtml {...attributes} html={svg} />
 }
-
-
-// function shitToUsefulShit(json: JSONContent): JsxElement
-// {
-// 	const element: JsxElement = {
-// 		tag: json.type,
-// 		attributes: json.content,
-// 	};
-
-// 	return element;
-// }

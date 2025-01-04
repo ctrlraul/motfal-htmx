@@ -1,7 +1,7 @@
-import { jsx, JsxElement } from 'jsx';
-import * as Case from '@wok/case';
-import { ArticlesHelper } from '../../../../articles/articles-helper.ts';
-import { Room } from '../../../../data/room.ts';
+import { jsx } from '@jsx';
+import { ArticlesHelper } from '../../../../articles/articles-helper';
+import { Room } from '../../../../data/room';
+import { capitalCase } from 'change-case';
 
 
 interface ArticlesCounterProps {
@@ -21,9 +21,9 @@ export function ArticlesCounter(props: ArticlesCounterProps)
 	const count = props.room.articles.length;
 	const domain = ArticlesHelper.getDomain(props.room.domainName)!;
 
-	const element: JsxElement = (
+	const element: JSX.Element = (
 		<span id={id} style='font-size: 1.2rem;'>
-			{count} {Case.titleCase(domain.itemName + (count === 1 ? '' : 's'))} submitted
+			{count} {capitalCase(domain.itemName + (count === 1 ? '' : 's'))} submitted
 		</span>
 	);
 

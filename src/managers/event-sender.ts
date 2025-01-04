@@ -1,43 +1,54 @@
-import { Router, ServerSentEvent, ServerSentEventTarget } from '@oak/oak';
-import { User } from '../data/user.ts';
-import { SessionParser } from '../middlewares/session-parser.ts';
-import { RoomsManager } from '../managers/rooms-manager.tsx';
-import { Logger } from '../helpers/logger.ts';
+import { User } from '../data/user';
+import { SessionParser } from '../middlewares/session-parser';
+import { RoomsManager } from '../managers/rooms-manager';
+import { Logger } from '../helpers/logger';
+import { Router, Response } from 'express';
 
 
 const logger = new Logger('EventSender');
-const targets: Map<User['id'], ServerSentEventTarget> = new Map();
-const router = new Router<CtxState>();
+const targets: Map<User['id'], Response> = new Map();
+const router = Router();
 
 
 router.use(SessionParser.middleware);
 
 
-router.get('/sse', async ctx => {
+router.get('/sse', async (req, res) => {
+	const { user } = req.session;
+	const target = res;
 
-	const { user } = ctx.state.session;
-	const target = await ctx.sendEvents();
+	res.setHeader('Content-Type', 'text/event-stream');
+	res.setHeader('Cache-Control', 'no-cache');
+	res.setHeader('Connection', 'keep-alive');
+	res.flushHeaders();
 
 	targets.set(user.id, target);
 
-	target.addEventListener('close', () => {
+	req.on('close', () => {
 		logger.log(user.nick, 'disconnected');
 		RoomsManager.notifyUserDisconnected(user);
+		targets.delete(user.id);
 	});
 
 	logger.log(user.nick, 'connected');
 	RoomsManager.notifyUserConnected(user);
-
 });
 
 
-function send(userId: User['id'], type: string, html: string) {
-	const sse = new ServerSentEvent(type, { data: html });
-	targets.get(userId)?.dispatchEvent(sse);
+
+function send(userId: User['id'], type: string, html: string)
+{
+	const target = targets.get(userId);
+
+	if (!target)
+		return;
+
+	target.write(`event: ${type}\n`);
+	target.write(`data: ${html}\n\n`);
 }
 
 function sendHtml(userId: User['id'], html: string) {
-	targets.get(userId)?.dispatchMessage(html);
+	targets.get(userId)?.write(html);
 }
 
 function isConnected(userId: User['id']) {

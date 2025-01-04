@@ -1,7 +1,7 @@
-import { Article } from '../../data/article.ts';
-import { ItemSuggestion, Domain, Rules } from '../articles-helper.ts';
-import * as Case from '@wok/case';
-import Axios from 'axiod';
+import { Article } from '../../data/article';
+import { ItemSuggestion, Domain, Rules } from '../articles-helper';
+import * as changeCase from 'change-case';
+import Axios from 'axios';
 
 
 interface ApiResponsePokemonSecies {
@@ -124,10 +124,10 @@ async function getArticle(id: string): Promise<Article>
 	const parsedId = parsePokemonId(id); 
 	const response = await axios.get<ApiResponsePokemon>('/pokemon/' + parsedId);
 	const article: Article = {
-		description: Case.titleCase(response.data.name) + ' is a pokemon!',
+		description: changeCase.capitalCase(response.data.name) + ' is a pokemon!',
 		italic: false,
 		link: pokedexBaseUrl + response.data.name,
-		title: Case.titleCase(response.data.name),
+		title: changeCase.capitalCase(response.data.name),
 		thumbnail: response.data.sprites.front_default,
 	};
 
@@ -147,8 +147,8 @@ async function getRandomArticles(count: number, _rules: Rules): Promise<ItemSugg
 	const responses = await Promise.all(promises);
 	
 	const suggestions: ItemSuggestion[] = responses.map(response => ({
-		id: Case.titleCase(response.data.name),
-		title: Case.titleCase(response.data.name),
+		id: changeCase.capitalCase(response.data.name),
+		title: changeCase.capitalCase(response.data.name),
 		search: pokedexBaseUrl + response.data.name,
 	}));
 
@@ -162,7 +162,7 @@ function parsePokemonId(id: string): string
 	{
 		const pathSegments = id.split('/');
 		const encodedTitle = pathSegments[pathSegments.length - 1];
-		return Case.paramCase(decodeURIComponent(encodedTitle));
+		return changeCase.kebabCase(decodeURIComponent(encodedTitle));
 	}
 
 	const int = parseInt(id);
@@ -170,7 +170,7 @@ function parsePokemonId(id: string): string
 	if (!isNaN(int))
 		return int.toString();
 
-	return Case.paramCase(id);
+	return changeCase.kebabCase(id);
 }
 
 

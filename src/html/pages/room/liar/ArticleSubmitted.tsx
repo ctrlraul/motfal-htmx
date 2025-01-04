@@ -1,8 +1,8 @@
-import { jsx } from 'jsx';
-import { Article } from '../../../../data/article.ts';
-import { Room } from '../../../../data/room.ts';
-import { ArticleTitle } from '@html/ArticleTitle.tsx';
-import * as Icons from '@html/icons.tsx';
+import { jsx } from '@jsx';
+import { Article } from '../../../../data/article';
+import { Room } from '../../../../data/room';
+import { ArticleTitle } from '@html/ArticleTitle';
+import * as Icons from '@html/icons';
 
 interface ArticleSubmittedProps {
 	room: Room;

@@ -1,5 +1,4 @@
 import tnacl from 'tweetnacl';
-import { Buffer } from 'node:buffer';
 
 
 function createSecretToken<T>(data: T, secret: Buffer): string {

@@ -1,35 +1,48 @@
-import escapeHtml from './helpers/escape-html.ts';
+import escapeHtml from './helpers/escape-html';
 import { parseDocument, ElementType } from 'htmlparser2';
 
 
-export interface JsxElement {
-	tag: string;
-	attributes: Record<string, unknown>;
-	children: (JsxElement | string)[];
+declare global {
+	namespace JSX {
+		
+		interface Element {
+			type: any;
+			attributes: Record<string, unknown>;
+			children: (Element | string)[];
+		}
+
+		interface IntrinsicElements {
+			[tagName: string]: any; // Allow any tag name with any props
+		}
+
+		interface IntrinsicAttributes {
+			[attr: string]: any; // Allow any attribute
+		}
+	}
 }
 
 
 const voidElements: Set<string> = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr']);
 
 
-function jsx(tag: unknown, attributes: Record<string, unknown> | null, ...children: JsxElement[]): JsxElement | JsxElement[]
+function jsx(type: unknown, attributes: Record<string, unknown> | null, ...children: JSX.Element[]): JSX.Element | JSX.Element[]
 {
-	if (typeof tag === 'function')
+	if (typeof type === 'function')
 	{
-		if (tag === Fragment)
+		if (type === Fragment)
 			return children;
 
-		return tag({ ...attributes, children });
+		return type({ ...attributes, children });
 	}
 
 	return {
-		tag: tag as string,
+		type: type as string,
 		attributes: attributes || {},
 		children
 	};
 }
 
-function Fragment(...children: JsxElement['children']): JsxElement['children']
+function Fragment(_type: unknown, _attributes: Record<string, unknown> | null, ...children: JSX.Element[]): JSX.Element['children']
 {
 	return children;
 }
@@ -46,22 +59,22 @@ function render(element: unknown, indent: string = ''): string
 	
 	// Handle Element
 	if (typeof element === 'object' && element !== null)
-		return renderElement(element as JsxElement);
+		return renderElement(element as JSX.Element);
 
 	return String(element);
 }
 
-function fromHtml(html: string): JsxElement['children']
+function fromHtml(html: string): JSX.Element['children']
 {
 	const dom = parseDocument(html);
-	const result: JsxElement['children'] = dom.children
+	const result: JSX.Element['children'] = dom.children
 		.map(child => toJsxElement(child))
 		.filter(element => element != null);
 	
 	return result;
 }
 
-function toJsxElement(node: ReturnType<typeof parseDocument>['children'][number]): JsxElement | string | null
+function toJsxElement(node: ReturnType<typeof parseDocument>['children'][number]): JSX.Element | string | null
 {
 	switch (node.type)
 	{
@@ -72,7 +85,7 @@ function toJsxElement(node: ReturnType<typeof parseDocument>['children'][number]
 		case ElementType.Script:
 		case ElementType.Style:
 			return {
-				tag: node.name,
+				type: node.name,
 				attributes: node.attribs,
 				children: node.children.map(toJsxElement).filter(child => child != null)
 			};
@@ -86,9 +99,9 @@ function toJsxElement(node: ReturnType<typeof parseDocument>['children'][number]
 	return null;
 }
 
-function renderElement(element: JsxElement): string
+function renderElement(element: JSX.Element): string
 {
-	const { tag } = element;
+	const { type: tag } = element;
 
 	let attributes: string = '';
 	let innerHtml: string | null = null;
@@ -97,9 +110,12 @@ function renderElement(element: JsxElement): string
 	{
 		if (value === undefined)
 			continue;
-
+		
 		switch (key)
 		{
+			case 'DANGEROUSLY_SET_OUTER_HTML':
+				return String(value);
+			
 			case 'DANGEROUSLY_SET_INNER_HTML':
 				innerHtml = String(value);
 				break;

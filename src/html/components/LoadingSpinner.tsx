@@ -1,4 +1,4 @@
-import { jsx, JsxElement } from 'jsx';
+import { jsx } from '@jsx';
 
 interface LoadingSpinnerProps {
 	[key: string]: unknown;
@@ -6,7 +6,7 @@ interface LoadingSpinnerProps {
 
 export function LoadingSpinner(props: LoadingSpinnerProps)
 {
-	const element: JsxElement = (
+	const element = (
 		<div {...props}>
 			<div class='spinner'></div>
 		</div>

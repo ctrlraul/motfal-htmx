@@ -1,6 +1,6 @@
-import { jsx } from 'jsx';
+import { jsx } from '@jsx';
 
-const indent = true;
+const indent = false;
 
 /** Inline JSON for use like `JSON.parse(document.getElementById(...).textContent)` */
 export function Json(props: { id: string, data: unknown }) {
@@ -14,5 +14,5 @@ export function Json(props: { id: string, data: unknown }) {
 			type='application/json'
 			DANGEROUSLY_SET_INNER_HTML={json}>
 		</script>
-	)
+	);
 }

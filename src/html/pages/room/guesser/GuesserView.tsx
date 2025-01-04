@@ -1,10 +1,10 @@
-import path from 'node:path';
-import { UsersList } from '@html/pages/room/guesser/UsersList.tsx';
-import { Style } from '@html/components/Style.tsx';
-import { Room } from '../../../../data/room.ts';
-import { jsx, Fragment } from 'jsx';
-import { ArticlesCounter } from '@html/pages/room/guesser/ArticlesCounter.tsx';
-import { StartButton } from '@html/pages/room/guesser/StartButton.tsx';
+import { UsersList } from '@html/pages/room/guesser/UsersList';
+import { Style } from '@html/components/Style';
+import { Room } from '../../../../data/room';
+import { jsx, Fragment } from '@jsx';
+import { ArticlesCounter } from '@html/pages/room/guesser/ArticlesCounter';
+import { StartButton } from '@html/pages/room/guesser/StartButton';
+import css from './guesser.css';
 
 export function GuesserView(props: { room: Room })
 {
@@ -30,7 +30,7 @@ export function GuesserView(props: { room: Room })
 				</div>
 			</section>
 
-			<Style src={path.join(import.meta.dirname!, 'guesser.css')} />
+			<Style css={css} />
 		</>
 	);
 }

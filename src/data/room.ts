@@ -1,6 +1,6 @@
-import { Rules } from '../articles/articles-helper.ts';
-import { Article } from './article.ts';
-import { User } from './user.ts';
+import { Rules } from '../articles/articles-helper';
+import { Article } from './article';
+import { User } from './user';
 
 export interface Room {
 	id: string;

@@ -1,5 +1,5 @@
-import { jsx } from 'jsx';
-import { Room } from '../../../../data/room.ts';
+import { jsx } from '@jsx';
+import { Room } from '../../../../data/room';
 
 
 interface StartButtonProps {
