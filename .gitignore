@@ -1,5 +1,6 @@
 # Todo: Get rid of dependencies that need it
 node_modules
 
+dist
 
 .env
