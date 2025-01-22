@@ -1,27 +1,34 @@
-import { jsx, Fragment, fromHtml } from '@jsx';
+import { jsx, Fragment, htmlToJsx, JsxElementChild } from '@jsx';
 import { omit } from '../../helpers/omit';
 
 
 
 interface FromHtmlProps {
 	html: string;
-	children?: JSX.Element['children'];
+	children?: JsxElementChild[];
 	[K: string]: unknown;
 }
 
 /** Create JSX elements from raw HTML */
-export function FromHtml(props: FromHtmlProps)
+export function FromHtml(props: FromHtmlProps): JSX.Element
 {
-	const elements = fromHtml(props.html);
-	const first = elements[0];
+	const children = htmlToJsx(props.html);
 
-	if (elements.length === 0 || typeof first === 'string')
-		return <>{elements}</>;
+	for (const child of children)
+	{
+		if (typeof child !== 'object')
+			continue;
+		
+		if (Array.isArray(child))
+			continue;
 
-	if (props.children)
-		first.children.push(...props.children);
+		if (props.children)
+			child.children.push(...props.children);
 
-	Object.assign(first.attributes, omit(props, ['html']));
+		Object.assign(child.attributes, omit(props, ['html']));
 
-	return <>{elements}</>;
+		break;
+	}
+
+	return <>{children}</>;
 }

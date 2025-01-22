@@ -1,71 +1,46 @@
 import { spawn } from 'child_process';
-import { watch } from 'fs';
-import { build } from './build.js';
+import chokidar from 'chokidar';
 import packageJson from '../package.json' with { type: 'json' };
 
+let appProcess = null;
 
-let nodeProcess;
-let debounceTimeouts = new Map();
-
-
-function startNodeProcess()
+function buildAndRestart()
 {
-	const cmd = packageJson.scripts.start.split(' ');
-	const process = spawn(cmd.shift(), cmd, { stdio: 'inherit' });
+	console.log('Building...');
 
-	process.on('exit', code => {
-		if (code !== null)
-			console.log(`Waiting for change to restart...`);
-	});
+	const buildProcess = runFromPackageJson('build');
 
-	return process;
-}
-
-async function dispatch(filename)
-{
-	console.clear();
-
-	if (filename)
-		console.log(`${filename} changed, rebuilding...`);
-
-	if (nodeProcess)
-		nodeProcess.kill();
-
-	try
-	{
-		await build();
-	}
-	catch (error)
-	{
-		console.log(`Waiting for change to restart...`);
-		return;
-	}
-
-	nodeProcess = startNodeProcess();
-}
-
-async function init()
-{
-	await dispatch();
-
-	watch('src', { recursive: true }, (eventType, filename) => {
-	
-		if (!filename || eventType !== 'change')
+	buildProcess.on('close', code => {
+		if (code !== 0) {
+			console.error('Build failed with code:', code);
 			return;
-	
-		if (debounceTimeouts.has(filename))
-			clearTimeout(debounceTimeouts.get(filename));
-	
-		debounceTimeouts.set(
-			filename,
-			setTimeout(() => {
-				debounceTimeouts.delete(filename);
-				dispatch(filename);
-			}, 100)
-		);
+		}
 
+		console.log('Build completed.');
+
+		if (appProcess) {
+			appProcess.kill();
+			console.log('Restarting app...');
+		}
+
+		console.clear();
+
+		appProcess = runFromPackageJson('start');
+
+		appProcess.on('close', code => {
+			if (code !== null && code !== 0)
+				console.error('App exited with code:', code);
+		});
 	});
 }
 
+function runFromPackageJson(scriptName)
+{
+	const startCmd = packageJson.scripts[scriptName].split(' ');
+	return spawn(startCmd.shift(), startCmd, { stdio: 'inherit' });
+}
 
-init();
+
+chokidar.watch('src', { ignoreInitial: true, awaitWriteFinish: true }).on('all', buildAndRestart);
+
+buildAndRestart();

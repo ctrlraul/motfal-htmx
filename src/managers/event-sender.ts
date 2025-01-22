@@ -1,28 +1,31 @@
+import { Router, Request, Response } from 'express';
 import { User } from '../data/user';
 import { SessionParser } from '../middlewares/session-parser';
 import { RoomsManager } from '../managers/rooms-manager';
 import { Logger } from '../helpers/logger';
-import { Router, Response } from 'express';
-
 
 const logger = new Logger('EventSender');
 const targets: Map<User['id'], Response> = new Map();
 const router = Router();
 
-
 router.use(SessionParser.middleware);
 
-
-router.get('/sse', async (req, res) => {
+router.get('/sse', (req: Request, res: Response) =>
+{
 	const { user } = req.session;
-	const target = res;
 
+	if (!user) {
+		res.status(401).send('Unauthorized');
+		return;
+	}
+
+	// Set up the SSE connection
 	res.setHeader('Content-Type', 'text/event-stream');
 	res.setHeader('Cache-Control', 'no-cache');
 	res.setHeader('Connection', 'keep-alive');
 	res.flushHeaders();
 
-	targets.set(user.id, target);
+	targets.set(user.id, res);
 
 	req.on('close', () => {
 		logger.log(user.nick, 'disconnected');
@@ -34,27 +37,24 @@ router.get('/sse', async (req, res) => {
 	RoomsManager.notifyUserConnected(user);
 });
 
-
-
-function send(userId: User['id'], type: string, html: string)
-{
+function send(userId: User['id'], type: string, html: string) {
 	const target = targets.get(userId);
+	const data = html.replace(/^(.?)/gm, 'data: $1');
 
-	if (!target)
-		return;
-
-	target.write(`event: ${type}\n`);
-	target.write(`data: ${html}\n\n`);
+	if (target)
+		target.write(`event: ${type}\n${data}\n\n`);
 }
 
 function sendHtml(userId: User['id'], html: string) {
-	targets.get(userId)?.write(html);
+	const target = targets.get(userId);
+	if (target) {
+		target.write(`data: ${html}\n\n`);
+	}
 }
 
 function isConnected(userId: User['id']) {
 	return targets.has(userId);
 }
-
 
 export const EventSender = {
 	router,
