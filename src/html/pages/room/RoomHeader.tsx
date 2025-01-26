@@ -28,7 +28,7 @@ export function RoomHeader(props: RoomHeaderProps) {
 				hx-target='#root'
 				hx-swap='outerHTML'
 				hx-replace-url='true'>
-				<Icons.Exit style='width: 1.25rem; height: 1.25rem;' />
+				<Icons.Leave style='width: 1.25rem; height: 1.25rem;' />
 			</button>
 
 		</header>

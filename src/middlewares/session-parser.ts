@@ -27,7 +27,10 @@ export class Session {
 	
 		const token = TokenHelper.createSecretToken(this, secret);
 
-		res.cookie(cookieName, token);
+		res.cookie(cookieName, token, {
+			maxAge: 1000 * 60 * 60 * 24 * 365,
+			httpOnly: true,
+		});
 	}
 }
 

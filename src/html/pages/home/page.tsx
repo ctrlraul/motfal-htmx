@@ -5,6 +5,7 @@ import { jsx } from '@jsx';
 import { NickSection } from '@html/pages/home/NickSection';
 import { LoadingSpinner } from '@html/components/LoadingSpinner';
 import { User } from '../../../data/user';
+import { Enter } from '../../icons';
 import css from './style.css';
 
 interface HomeProps {
@@ -43,7 +44,9 @@ export function Home(props: HomeProps)
 							placeholder='Go to room'
 							required />
 
-						<button class='g-big' type='submit'>⎆</button>
+						<button class='g-big' type='submit'>
+							<Enter />
+						</button>
 						
 						<LoadingSpinner id='join-indicator' style='border-radius: var(--radius-common)' />
 					</form>

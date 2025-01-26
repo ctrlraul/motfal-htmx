@@ -7,9 +7,14 @@ export function Check(props?: object)
 	return <Svg {...props} src={path.join(process.cwd(), '/static/images/icons/check.svg')} />
 }
 
-export function Exit(props?: object)
+export function Enter(props?: object)
 {
-	return <Svg {...props} src={path.join(process.cwd(), '/static/images/icons/exit.svg')} />
+	return <Svg {...props} src={path.join(process.cwd(), '/static/images/icons/enter.svg')} />
+}
+
+export function Leave(props?: object)
+{
+	return <Svg {...props} src={path.join(process.cwd(), '/static/images/icons/leave.svg')} />
 }
 
 export function OpenExternal(props?: object)

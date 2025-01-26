@@ -55,6 +55,7 @@ router.post('/cookies/reject', (req, res) => {
 
 	res.clearCookie(SessionParser.cookieName);
 	res.header('Hx-Redirect', 'https://www.google.com/');
+	res.send();
 });
 
 router.get('/nick-change', (req, res) => {
