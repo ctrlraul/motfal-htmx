@@ -167,9 +167,15 @@ router.post('/join', async (req, res) => {
 	const code = req.body['code'];
 	const id = String(code || '').split('/').pop();
 	
-	if (!id) {
+	if (!id)
+	{
 		console.log(`[${req.path}]`, req.session.user.nick, '-> Invalid code:', code);
-		res.redirect('/');
+		
+		res.type('text/html');
+		res.send(render(
+			<Home user={req.session.user} joinError="Invalid Code" />
+		));
+
 		return;
 	}
 
@@ -194,14 +200,24 @@ router.get('/join/:id', (req, res) => {
 
 	const room = RoomsManager.getRoom(roomId);
 
-	if (!room) { // Room not found page?
+	if (!room)
+	{
 		console.log(`[${req.path}]`, user.nick, '-> No room with id:', roomId);
-		res.redirect('/');
+
+		res.type('text/html');
+		res.send(render(
+			<Home user={req.session.user} joinError="Room not found" />
+		));
+		
 		return;
 	}
 
-	if (room.kicked.includes(user.id)) {
-		res.redirect('/');
+	if (room.kicked.includes(user.id))
+	{
+		res.type('text/html');
+		res.send(render(
+			<Home user={req.session.user} joinError="Kicked" />
+		));
 		return;
 	}
 
@@ -250,7 +266,7 @@ router.post('/kick', (req, res) =>
 	if (user.id !== room.guesserId)
 	{
 		console.log(`[${req.path}]`, user.nick, '-> Only the guesser can kick');
-		res.redirect('/');
+		res.redirect('/room');
 		return;
 	}
 

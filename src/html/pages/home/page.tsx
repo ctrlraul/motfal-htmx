@@ -10,6 +10,7 @@ import css from './style.css';
 
 interface HomeProps {
 	user: User;
+	joinError?: string;
 }
 
 export function Home(props: HomeProps)
@@ -50,6 +51,10 @@ export function Home(props: HomeProps)
 						
 						<LoadingSpinner id='join-indicator' style='border-radius: var(--radius-common)' />
 					</form>
+
+					<div id="join-error-message">
+						{props.joinError}
+					</div>
 					
 					{<NickSection nick={props.user.nick} />}
 						

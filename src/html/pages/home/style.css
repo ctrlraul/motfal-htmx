@@ -87,3 +87,29 @@ footer {
 	text-align: center;
 	padding: 1rem;
 }
+
+
+#join-error-message {
+	color: var(--color-bad);
+	height: 3em;
+	animation: fadeout 5s;
+	opacity: 0;
+}
+
+@keyframes fadeout {
+	0% {
+		opacity: 0;
+	}
+
+	5% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+	}
+}
