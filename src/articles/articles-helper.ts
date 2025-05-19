@@ -1,7 +1,8 @@
 import { Article } from '../data/article';
-import { PokeApi } from './domains/pokeapi.co';
 import { WikipediaOrg } from './domains/wikipedia.org';
 import { WiktionaryOrg } from './domains/wiktionary.org';
+import { PokeApi } from './domains/pokeapi.co';
+import { Minecraft } from './domains/minecraft';
 
 
 export interface Rule {
@@ -39,6 +40,7 @@ const domains: Map<string, Domain> = new Map();
 domains.set(WikipediaOrg.name, WikipediaOrg);
 domains.set(WiktionaryOrg.name, WiktionaryOrg);
 domains.set(PokeApi.name, PokeApi);
+domains.set(Minecraft.name, Minecraft);
 
 
 
