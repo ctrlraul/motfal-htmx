@@ -74,7 +74,7 @@ function createRoom(
 
 	rooms.set(room.id, room);
 
-	logger.log(`Room created (${room.id})`);
+	logger.info(`Room created (${room.id})`);
 
 	return room;
 }
@@ -96,7 +96,7 @@ function getUserRoom(userId: User['id']): Room | null {
 
 function addUserToRoom(room: Room, user: User): void {
 	
-	logger.log(`Adding user '${user.nick}' to room '${room.id}'`);
+	logger.info(`Adding user '${user.nick}' to room '${room.id}'`);
 
 	room.users[user.id] = user;
 
@@ -117,7 +117,7 @@ function removeUserFromRoom(room: Room, userId: User['id']): void
 	if (!user)
 		throw new Error(`No user with id '${userId}' in room '${room.id}'`)
 
-	logger.log(`Removing user (${user.id}) from room (${room.id})`);
+	logger.info(`Removing user (${user.id}) from room (${room.id})`);
 
 	// Don't notify if room is already started
 	const shouldNotifyOthers = room.currentArticle === -1;
@@ -206,7 +206,7 @@ function startRoom(requestedByUserId: User['id'], room: Room) {
 	if (room.currentArticle != -1)
 		throw new Error('Already started');
 
-	logger.log('Starting room', room.id);
+	logger.info('Starting room', room.id);
 
 	room.currentArticle = Math.floor(Math.random() * room.articles.length);
 
@@ -228,7 +228,7 @@ function inviteToNewRoom(fromRoom: Room, fromUser: User, toRoom: Room): void
 }
 
 function deleteRoom(roomId: Room['id']): void {
-	logger.log(`Deleting room (${roomId})`);
+	logger.info(`Deleting room (${roomId})`);
 	rooms.delete(roomId);
 }
 

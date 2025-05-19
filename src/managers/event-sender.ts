@@ -28,12 +28,12 @@ router.get('/sse', (req: Request, res: Response) =>
 	targets.set(user.id, res);
 
 	req.on('close', () => {
-		logger.log(user.nick, 'disconnected');
+		logger.info(user.nick, 'disconnected');
 		RoomsManager.notifyUserDisconnected(user);
 		targets.delete(user.id);
 	});
 
-	logger.log(user.nick, 'connected');
+	logger.info(user.nick, 'connected');
 	RoomsManager.notifyUserConnected(user);
 });
 

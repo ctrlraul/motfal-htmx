@@ -6,7 +6,9 @@ let appProcess = null;
 
 function buildAndRestart()
 {
-	console.log('Building...');
+	if (!appProcess) {
+		console.log('Starting app...');
+	}
 
 	const buildProcess = runFromPackageJson('build');
 
@@ -16,14 +18,10 @@ function buildAndRestart()
 			return;
 		}
 
-		console.log('Build completed.');
-
 		if (appProcess) {
 			appProcess.kill();
 			console.log('Restarting app...');
 		}
-
-		console.clear();
 
 		appProcess = runFromPackageJson('start');
 
